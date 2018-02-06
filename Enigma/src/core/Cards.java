@@ -10,21 +10,21 @@ package core;
  * @author Red
  */
 public class Cards {
-    private int index;
+    private int count;
     private int max;
     private Card[] cards;
     
     public Cards()
     {
         this.cards   = null;
-        this.index   = 0;
+        this.count   = 0;
         this.max     = 0;
     }
     
     public Cards(int max)
     {
         this.max    = max;
-        this.index  = 0;
+        this.count  = 0;
         this.cards = new Card[max];
     }
     
@@ -35,10 +35,10 @@ public class Cards {
     
     public void add(Card card)
     {
-        if(this.index < this.max)
+        if(this.count < this.max)
         {
-            this.cards[this.index] = card;
-            this.index++;
+            this.cards[this.count] = card;
+            this.count++;
         }
     }
     
@@ -52,9 +52,10 @@ public class Cards {
     
     public void show()
     {
-        for(int i=0 ; i<this.index ; i++)
+        for(int i=0 ; i<this.count ; i++)
         {
             System.out.println(this.cards[i].toString());
         }
+        System.out.println("Il y a " + this.count + " Cartes.");
     }
 }

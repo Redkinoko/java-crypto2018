@@ -6,6 +6,7 @@
 package core;
 
 import java.awt.Color;
+import view.App;
 
 /**
  *
@@ -19,19 +20,28 @@ public class Main {
     public static void main(String[] args)
     {
         //CREATION DES COULEURS
-        CardColor diamond  = new CardColor("Carreau",  'd', Color.RED).setIcon('♦');
-        CardColor heart    = new CardColor("Coeur",    'h', Color.RED).setIcon('♥');
-        CardColor club     = new CardColor("Trèfle",   'c', Color.BLACK).setIcon('♣');
-        CardColor spade    = new CardColor("Pique",    's', Color.BLACK).setIcon('♠');
+        CardColor diamond    = new CardColor("Carreau",  'd', Color.RED).setIcon('♦');
+        CardColor heart      = new CardColor("Coeur",    'h', Color.RED).setIcon('♥');
+        CardColor jokerRed   = new CardColor("Joker",    'j', Color.RED).setIcon('☺');
+        CardColor club       = new CardColor("Trèfle",   'c', Color.BLACK).setIcon('♣');
+        CardColor spade      = new CardColor("Pique",    's', Color.BLACK).setIcon('♠');
+        CardColor jokerBlack = new CardColor("Joker",    'j', Color.BLACK).setIcon('☻');
 
         //GENERATION DES CARTES
-        Cards cards = new Cards(52);
+        Cards cards = new Cards(54);
         cards.generate(diamond, 1, 13);        
         cards.generate(heart,   1, 13);
         cards.generate(club,    1, 13);
         cards.generate(spade,   1, 13);
+        cards.generate(jokerBlack, 14, 14);
+        cards.generate(jokerRed, 15, 15);
         
+        //AFFICHAGE DU DECK
         cards.show();
+        
+        App app = new App();
+        app.setTitle("java-crypto2018 - M1 - 2017/2018 - Projet Cryptographie et jeu de cartes");
+        //app.setVisible(true);
     }
     
     private static void printf(String s)

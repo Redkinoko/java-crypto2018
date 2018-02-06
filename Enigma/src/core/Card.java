@@ -6,7 +6,6 @@
 package core;
 
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
@@ -17,8 +16,13 @@ import javax.imageio.ImageIO;
  */
 public class Card {
     
-    private static String IMG_REP = "ressources";
-    private static String IMG_EXT = ".gif";
+    private static String IMG_REP   = "ressources";
+    private static String IMG_EXT   = ".gif";
+    private static String AS        = "As";
+    private static String VALET     = "Valet";
+    private static String REINE     = "Reine";
+    private static String ROI       = "Roi";
+    private static String JOKER     = "Joker";
     
     private CardColor color;
     private int value;
@@ -81,13 +85,16 @@ public class Card {
         switch(this.value)
         {
             case 1:
-                return "As";
+                return AS;
             case 11:
-                return "Valet";
+                return VALET;
             case 12:
-                return "Reine";
+                return REINE;
             case 13:
-                return "Roi";
+                return ROI;
+            case 14:
+            case 15:
+                return JOKER;
             default:
                 return "" + this.value;
         }
@@ -96,6 +103,6 @@ public class Card {
     @Override
     public String toString()
     {
-        return (this.color.toString() + getCardName());
+        return (this.color.toString() + " " + getCardName());
     }
 }
