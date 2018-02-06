@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package enigma;
+package core;
 
 import java.awt.Image;
 import java.io.File;
@@ -76,9 +76,26 @@ public class Card {
         return img;
     }
     
+    public String getCardName()
+    {
+        switch(this.value)
+        {
+            case 1:
+                return "As";
+            case 11:
+                return "Valet";
+            case 12:
+                return "Reine";
+            case 13:
+                return "Roi";
+            default:
+                return "" + this.value;
+        }
+    }
+    
     @Override
     public String toString()
     {
-        return (this.value + " - " + this.color.getName());
+        return (this.color.toString() + getCardName());
     }
 }

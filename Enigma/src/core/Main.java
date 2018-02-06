@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package enigma;
+package core;
 
 import java.awt.Color;
 
@@ -11,7 +11,7 @@ import java.awt.Color;
  *
  * @author Red
  */
-public class Enigma {
+public class Main {
 
     /**
      * @param args the command line arguments
@@ -19,10 +19,10 @@ public class Enigma {
     public static void main(String[] args)
     {
         //CREATION DES COULEURS
-        CardColor diamond  = new CardColor("Carreau",  'd', Color.RED);
-        CardColor heart    = new CardColor("Coeur",    'h', Color.RED);
-        CardColor club     = new CardColor("Trèfle",   'c', Color.BLACK);
-        CardColor spade    = new CardColor("Pique",    's', Color.BLACK);
+        CardColor diamond  = new CardColor("Carreau",  'd', Color.RED).setIcon('♦');
+        CardColor heart    = new CardColor("Coeur",    'h', Color.RED).setIcon('♥');
+        CardColor club     = new CardColor("Trèfle",   'c', Color.BLACK).setIcon('♣');
+        CardColor spade    = new CardColor("Pique",    's', Color.BLACK).setIcon('♠');
 
         //GENERATION DES CARTES
         Cards cards = new Cards(52);
