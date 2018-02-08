@@ -5,6 +5,12 @@
  */
 package core;
 
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
+
 /**
  *
  * @author Red
@@ -74,16 +80,59 @@ public class Cards {
         }
     }
     
+    public void moveTo(int i, int j)
+    {
+        if(i >= 0 && i < this.count && j >= 0 && j < this.count)
+        {
+            if(i > j)
+            {
+                for(int k=i ; k>j ; k--)
+                {
+                    switchCards(k-1, k);
+                }
+            }
+            else if (i < j)
+            {
+                for(int k=i ; k<j ; k++)
+                {
+                    switchCards(k, k+1);
+                }
+            }
+        }
+    }
+    
     public void pushDown(int i)
     {
         //si moins de 2 cartes
         if(i == (this.count-1))
         {
-            switchCards(i, 2);
+            moveTo(i, 1);
         }
         else
         {
             switchCards(i, i+1);
         }
+    }
+    
+    public void mix()
+    {
+        int max = this.count();
+        int min = 0;
+        
+        for(int i=0 ; i<this.count() ; i++)
+        {
+            int rnd = (int)(Math.random()*(max-min) + min);
+            this.switchCards(i, rnd);
+        }
+    }
+    
+    public int getBlackJokerIndex()
+    {
+        CardFinderObject bj = new CardFinder(this)
+            .findByCardName("Joker")
+            .findByColor(Color.BLACK)
+            .getOne()
+        ;
+        return (bj != null)?bj.getIndex():-1;
     }
 }
