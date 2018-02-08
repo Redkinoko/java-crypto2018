@@ -7,6 +7,7 @@ package view;
 
 import core.Card;
 import core.Cards;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -58,7 +59,10 @@ public class CardViewer extends javax.swing.JPanel {
                 if(k < this.cards.count())
                 {
                     g.drawImage(cards.get(k).getImg(), x, y, this);
-                    
+                    g.setColor(Color.WHITE);
+                    g.fillRect(x+2, y+Card.HEIGHT-13, 32, 12);
+                    g.setColor(Color.BLACK);
+                    g.drawString((k+1) + "/" + this.cards.count(), x+2, y+Card.HEIGHT-2);
                 }
                 k++;
             }

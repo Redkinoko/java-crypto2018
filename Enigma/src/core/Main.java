@@ -49,9 +49,10 @@ public class Main {
         CardViewer cw = new CardViewer(cards);
         app.addToJPanel1(cw);
         
-        cards.pushDown(0);
+        //cards.pushDown(53);
+        cards.mix();
         cw.repaint();
-        
+        printf("Le joker noir est à la position " + (cards.getBlackJokerIndex()+1) + "/" + (cards.count()) + ".\n");
         app.setVisible(true);
     }
     
