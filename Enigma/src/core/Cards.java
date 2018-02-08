@@ -63,4 +63,27 @@ public class Cards {
     {
         return this.count;
     }
+    
+    public void switchCards(int i, int j)
+    {
+        if(i >= 0 && i < this.count && j >= 0 && j < this.count)
+        {
+            Card c = this.cards[j];
+            this.cards[j] = this.cards[i];
+            this.cards[i] = c;
+        }
+    }
+    
+    public void pushDown(int i)
+    {
+        //si moins de 2 cartes
+        if(i == (this.count-1))
+        {
+            switchCards(i, 2);
+        }
+        else
+        {
+            switchCards(i, i+1);
+        }
+    }
 }

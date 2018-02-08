@@ -49,6 +49,9 @@ public class Main {
         CardViewer cw = new CardViewer(cards);
         app.addToJPanel1(cw);
         
+        cards.pushDown(0);
+        cw.repaint();
+        
         app.setVisible(true);
     }
     
