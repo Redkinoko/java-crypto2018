@@ -5,22 +5,37 @@
  */
 package view;
 
-import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JPanel;
+import java.awt.Component;
+import java.awt.Dimension;
 
 /**
  *
  * @author Red
  */
 public class App extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form App
      */
     public App() {
         initComponents();
+    }
+    
+    public Component addToJPanel1(Component comp)
+    {
+        this.jPanel1.add(comp);
+        int w = (this.getWidth() + comp.getPreferredSize().width);//171
+        int h = (this.getHeight() + comp.getPreferredSize().height);//144
+
+        Dimension d = new Dimension(w, h);
+        this.jPanel1.setPreferredSize(d);
+        this.jPanel1.setMinimumSize(d);
+        
+        Dimension d2 = new Dimension(w + this.getMinimumSize().width, h + this.getMinimumSize().height);
+        this.setMinimumSize(d2);
+        this.setPreferredSize(d2);
+        
+        return comp;
     }
     
     /**
@@ -32,8 +47,43 @@ public class App extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.FlowLayout());
+        setMinimumSize(new java.awt.Dimension(1, 1));
+        setPreferredSize(new java.awt.Dimension(0, 0));
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.setMinimumSize(new java.awt.Dimension(1, 1));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1, 1));
+        jPanel1.setLayout(new java.awt.BorderLayout());
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.setMinimumSize(new java.awt.Dimension(1, 1));
+
+        jLabel1.setText("jLabel1");
+        jPanel2.add(jLabel1);
+
+        getContentPane().add(jPanel2, java.awt.BorderLayout.EAST);
+
+        jLabel2.setText("jLabel2");
+        jPanel3.add(jLabel2);
+
+        getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel3.setText("jLabel3");
+        jPanel4.add(jLabel3);
+
+        getContentPane().add(jPanel4, java.awt.BorderLayout.WEST);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -74,5 +124,12 @@ public class App extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     // End of variables declaration//GEN-END:variables
 }

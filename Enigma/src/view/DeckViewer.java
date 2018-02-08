@@ -5,19 +5,32 @@
  */
 package view;
 
+import core.Cards;
+
 /**
  *
  * @author Red
  */
 public class DeckViewer extends javax.swing.JPanel {
 
+    private Cards cards;
     /**
      * Creates new form CardViewer
      */
     public DeckViewer() {
         initComponents();
     }
-
+    
+    public DeckViewer(Cards cards) 
+    {
+        initComponents();
+        this.cards = cards;
+    }
+    
+    public Cards getCards() {
+        return cards;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -35,6 +48,7 @@ public class DeckViewer extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jPanelCenter = new javax.swing.JPanel();
 
+        setBorder(javax.swing.BorderFactory.createEtchedBorder());
         setLayout(new java.awt.BorderLayout());
 
         jPanelEast.setBorder(javax.swing.BorderFactory.createTitledBorder("Menu"));

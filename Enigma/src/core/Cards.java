@@ -58,4 +58,9 @@ public class Cards {
         }
         System.out.println("Il y a " + this.count + " Cartes.");
     }
+    
+    public int count()
+    {
+        return this.count;
+    }
 }

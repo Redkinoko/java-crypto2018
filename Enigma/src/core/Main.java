@@ -6,7 +6,11 @@
 package core;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import view.App;
+import view.CardPanel;
+import view.CardViewer;
+import view.DeckViewer;
 
 /**
  *
@@ -37,11 +41,15 @@ public class Main {
         cards.generate(jokerRed, 15, 15);
         
         //AFFICHAGE DU DECK
-        cards.show();
+        //cards.show();
         
         App app = new App();
         app.setTitle("java-crypto2018 - M1 - 2017/2018 - Projet Cryptographie et jeu de cartes");
-        //app.setVisible(true);
+
+        CardViewer cw = new CardViewer(cards);
+        app.addToJPanel1(cw);
+        
+        app.setVisible(true);
     }
     
     private static void printf(String s)
