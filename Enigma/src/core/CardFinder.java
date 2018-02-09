@@ -36,39 +36,40 @@ public class CardFinder {
     
     public CardFinder findByColor(Color color)
     {
-        int i = 0;
-        while(i < list.size())
+        for(int i = (list.size()-1) ; i >= 0 ; i--)
         {
             if(this.list.get(i).getCard().getColor().getColor() != color)
             {
+                //System.out.println(list.get(i).getCard().toString());
                 list.remove(i);
-                i=0;
-            }
-            else
-            {
-                i++;
             }
         }
-        
         return this;
     }
     
     public CardFinder findByCardName(String name)
     {
-        int i = 0;
-        while(i < list.size())
+        for(int i = (list.size()-1) ; i >= 0 ; i--)
         {
             if(!(this.list.get(i).getCard().getCardName()).toLowerCase().equals(name.toLowerCase()))
             {
+                //System.out.println(list.get(i).getCard().toString());
                 this.list.remove(i);
-                i=0;
-            }
-            else
-            {
-                i++;
             }
         }
-        
+        return this;
+    }
+    
+    public CardFinder findByColorName(String name)
+    {
+        for(int i = (list.size()-1) ; i >= 0 ; i--)
+        {
+            if(!(this.list.get(i).getCard().getColor().getName()).toLowerCase().equals(name.toLowerCase()))
+            {
+                //System.out.println(list.get(i).getCard().toString());
+                this.list.remove(i);
+            }
+        }
         return this;
     }
     

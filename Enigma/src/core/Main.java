@@ -48,7 +48,7 @@ public class Main {
         app.addToJPanel1(cw);
         
         int bj = cards.getBlackJokerIndex();
-        cards.pushDown(bj, 2);
+        cards.pushDown(bj, 1);
         //cards.mix();
         cw.repaint();
         printf("Le joker noir est à la position " + (cards.getBlackJokerIndex()+1) + "/" + (cards.count()) + ".\n");
