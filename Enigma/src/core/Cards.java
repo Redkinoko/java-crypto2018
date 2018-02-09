@@ -101,16 +101,16 @@ public class Cards {
         }
     }
     
-    public void pushDown(int i)
+    public void pushDown(int i, int j)
     {
         //si moins de 2 cartes
-        if(i == (this.count-1))
+        if(i >= (this.count-j))
         {
-            moveTo(i, 1);
+            moveTo(i, j);
         }
         else
         {
-            switchCards(i, i+1);
+            switchCards(i, i+j);
         }
     }
     

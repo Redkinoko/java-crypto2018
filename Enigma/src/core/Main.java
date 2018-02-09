@@ -8,9 +8,7 @@ package core;
 import java.awt.Color;
 import java.awt.Dimension;
 import view.App;
-import view.CardPanel;
 import view.CardViewer;
-import view.DeckViewer;
 
 /**
  *
@@ -49,8 +47,9 @@ public class Main {
         CardViewer cw = new CardViewer(cards);
         app.addToJPanel1(cw);
         
-        //cards.pushDown(53);
-        cards.mix();
+        int bj = cards.getBlackJokerIndex();
+        cards.pushDown(bj, 2);
+        //cards.mix();
         cw.repaint();
         printf("Le joker noir est à la position " + (cards.getBlackJokerIndex()+1) + "/" + (cards.count()) + ".\n");
         app.setVisible(true);

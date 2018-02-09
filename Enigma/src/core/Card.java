@@ -9,7 +9,6 @@ import java.awt.Image;
 import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
-import view.CardPanel;
 
 /**
  *
@@ -31,14 +30,12 @@ public class Card {
     private CardColor color;
     private int value;
     private Image img;
-    private CardPanel cp;
     
     public Card()
     {
         color   = null;
         value   = -1;
         img     = null;
-        cp      = null;
     }
     
     public Card(CardColor color, int value)
@@ -46,7 +43,6 @@ public class Card {
         this.color  = color;
         this.value  = value;
         this.img    = makeImage();
-        this.cp     = new CardPanel(this);
     }
     
     public URL getImagePath()
@@ -111,9 +107,5 @@ public class Card {
     public String toString()
     {
         return (this.color.toString() + " " + getCardName());
-    }
-
-    public CardPanel getCardPanel() {
-        return cp;
     }
 }
