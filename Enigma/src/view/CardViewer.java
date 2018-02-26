@@ -219,6 +219,10 @@ public class CardViewer extends javax.swing.JPanel {
         {
             this.index += this.rows;
         }
+        else if(this.index < (this.cards.count()-1))
+        {
+            this.index += 1;
+        }
         this.repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -227,6 +231,11 @@ public class CardViewer extends javax.swing.JPanel {
         {
             this.index -= this.rows;
         }
+        else if(this.index > 0)
+        {
+            this.index -= 1;
+        }
+        
         this.repaint();
     }//GEN-LAST:event_jButton1ActionPerformed
 
