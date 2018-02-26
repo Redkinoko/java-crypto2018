@@ -146,38 +146,50 @@ public class Cards {
         return (bj != null)?bj.getIndex():-1;
     }
     
-    public Cards generateJokerCut()
+    public void generateJokerCut()
     {
         int B = this.getBlackJokerIndex();
         int R = this.getRedJokerIndex();
         
         if(B >= R)
         {
-            return jokerCut(R,B);
+            this.jokerCut(R,B);
         }
         else
         {
-            return jokerCut(B,R);
+            this.jokerCut(B,R);
         }
     }
     
-    private Cards jokerCut(int a, int b)
+    private void jokerCut(int a, int b)
     {
-        Cards res = new Cards(54);
+        Card[] res = new Card[max];
+        int ind = 0;
+        for(int i=0 ; i<max-b ; i++)
+        {
+            if(ind<max)
+            {
+                res[ind] = (this.cards[b+i]);
+                ind++;
+            }
+        }
+        for(int i=0 ; i<b-a+1 ; i++)
+        {
+            if(ind<max)
+            {
+                res[ind] = (this.cards[a+i-1]);
+                ind++;
+            }
+        }
+        for(int i=0 ; i<a-1 ; i++)
+        {
+            if(ind<max)
+            {
+                res[ind] = (this.cards[i]);
+                ind++;
+            }
+        }
         
-        for(int i=0;i<max-b;i++)
-        {
-            res.add(this.cards[b+i]);
-        }
-        for(int i=0;i<b-a+1;i++)
-        {
-            res.add(this.cards[a+i-1]);
-        }
-        for(int i=0;i<a-1;i++)
-        {
-            res.add(this.cards[i]);
-        }
-        
-        return res;
+        this.cards = res;
     }
 }

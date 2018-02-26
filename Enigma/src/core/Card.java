@@ -83,6 +83,22 @@ public class Card {
         return img;
     }
     
+    public int getTotalValue()
+    {
+        if(this.color != null)
+        {
+            switch(this.value)
+            {
+                case 14:
+                case 15:
+                    return this.color.getValue();
+                default:
+                    return (this.color.getValue() + this.value);
+            }
+        }
+        return value;
+    }
+    
     public String getCardName()
     {
         switch(this.value)

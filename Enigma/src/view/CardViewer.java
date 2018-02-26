@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 /**
  *
@@ -21,10 +22,11 @@ public class CardViewer extends javax.swing.JPanel {
     private Cards cards;
     private int rows;
     private int cols;
-    private int rowsFactor = 14;
-    private int colsFactor = 40;
-    private int size;
     private int index;
+    private int marginTop       = 1;
+    private int marginBottom    = 13;
+    private int marginLeft      = 1;
+    private int marginRight     = 1;
     /**
      * Creates new form CardViewer
      */
@@ -36,65 +38,118 @@ public class CardViewer extends javax.swing.JPanel {
         this.cards = cards;
         this.rows = 1;
         this.cols = 1;
-        this.size = 0;
         this.index = 0;
-        this.jPanel1.setPreferredSize(new Dimension(Card.WIDTH*6, 126));
+        int w = (marginLeft + Card.WIDTH + marginRight)*6;
+        int h = marginTop+126+marginBottom;
+        this.jPanelCenter.setPreferredSize(new Dimension(w, h));
     }
 
     @Override
     public void paint(Graphics g)
     {
         super.paint(g);
-        Graphics g2 = this.jPanel1.getGraphics();
         
-        this.rows = this.jPanel1.getWidth()/ (Card.WIDTH);
-        this.cols = this.jPanel1.getHeight()/ (Card.HEIGHT);
+        this.rows = this.jPanelCenter.getWidth()/ (marginLeft + Card.WIDTH + marginRight);
+        this.cols = this.jPanelCenter.getHeight()/ (marginTop + Card.HEIGHT + marginBottom);
         if((this.rows*this.cols) >= this.cards.count())
         {
             index = 0;
         }
+        
         int k = index;
-        for(int i=0 ; i <this.rows  ; i++)
+        int originX = 5 + this.jPanelCenter.getX();
+        int originY = 2 + this.jPanelCenter.getY();
+        int maxX = (this.cols>1)?this.cols:this.rows;
+        int maxY = (this.cols>1)?this.rows:this.cols;
+        
+        for(int i=0 ; i <maxX  ; i++)
         {
-            for(int j=0 ; j<this.cols ; j++)
+            for(int j=0 ; j<maxY ; j++)
             {
-                int x = 3 + this.jPanel1.getX() + (i * (Card.WIDTH));
-                int y = this.jPanel1.getY() + (j * (Card.HEIGHT));
+                int x = originX + (i * (marginLeft + Card.WIDTH + marginRight));
+                int y = originY + (j * (marginTop + Card.HEIGHT + marginBottom));
+                if(this.cols >1)
+                {
+                    x = originX + (j * (marginLeft + Card.WIDTH + marginRight));
+                    y = originY + (i * (marginTop + Card.HEIGHT + marginBottom));
+                }
                 if(k < this.cards.count())
                 {
-                    g.drawImage(cards.get(k).getImg(), x, y, this);
-                    g.setColor(Color.WHITE);
-                    g.fillRect(x+2, y+Card.HEIGHT-13, 32, 12);
-                    g.setColor(Color.BLACK);
-                    g.drawString((k+1) + "/" + this.cards.count(), x+2, y+Card.HEIGHT-2);
+                    //Afficher la carte n°k
+                    drawCard(g, k, x, y);
+                    //Afficher le cadre de légende
+                    drawCardDesc(g, k, x, y+Card.HEIGHT);
                 }
                 k++;
             }
         }
-        boolean b = !((this.cols * this.rows) >= this.cards.count());
-        this.jPanel2.setVisible(b);            
-        this.jPanel3.setVisible(b);
-        this.jPanel4.setVisible(b);
-
+        //Cacher les boutons de changement de page si toutes les cartes sont affichées
+        showPanels();
+        drawNbPageIndicator();
+    }
+    
+    public void drawCard(Graphics g, int k, int x, int y)
+    {
+        g.drawImage(cards.get(k).getImg(), x, y, this);
+    }
+    
+    public void drawCardDesc(Graphics g, int k, int x, int y)
+    {
+        //Afficher la bordure de fond
+        drawCardDescBorder(g, x, y);
+        //Afficher l'index de la carte n°k dans le paquet
+        drawCardNb(g, k, x+8, y+11);
+        //Afficher la valeur d'une carte utilisée pour l'encodage
+        drawCardValue(g, k, 10+x+32, y+11);
+    }
+    
+    public void drawCardDescBorder(Graphics g, int x, int y)
+    {
+        g.setColor(Color.WHITE);
+        g.fillRect(x, y, Card.WIDTH, 12);
+        g.setColor(Color.BLACK);
+        g.drawRoundRect(x, y, Card.WIDTH, 12, 2, 2);
+    }
+    
+    public void drawCardNb(Graphics g, int k, int x, int y)
+    {
+        int n = (k+1);
+        String text1 = (n<10)?("0" + n):("" + n);
+        String text2 = "/" + this.cards.count();
+        
+        g.setColor(Color.RED);
+        g.drawString(text1,x,y);
+        g.setColor(Color.BLACK);
+        g.drawString(text2, x+14, y);
+    }
+    
+    public void drawCardValue(Graphics g, int k, int x, int y)
+    {
+        int n = this.cards.get(k).getTotalValue();
+        String text1 = "v:";
+        String text2 = (n<10)?("0" + n):("" + n);
+        
+        g.setColor(Color.BLACK);
+        g.drawString(text1, x, y);
+        g.setColor(Color.RED);
+        g.drawString(text2, x+8, y);
+    }
+    
+    public void drawNbPageIndicator()
+    {
         if(this.cols > 0 && this.rows > 0)
         {
             this.jLabel1.setText("page: " + (1+(this.index/this.rows)) + "/" + (this.cards.count()/this.rows));
         }
     }
-    /*
-    @Override
-    public Component add(Component comp)
+    
+    public void showPanels()
     {
-        super.add(comp);
-        int w = (rowsFactor + comp.getPreferredSize().width) * cols;//171
-        int h = (colsFactor + comp.getPreferredSize().height) * rows;//144
-
-        Dimension d = new Dimension(w, h);
-        this.setPreferredSize(d);
-        //this.setMinimumSize(d);
-        
-        return comp;
-    }*/
+        boolean b = !((this.cols * this.rows) >= this.cards.count());
+        this.jPanelWest.setVisible(b);            
+        this.jPanelEast.setVisible(b);
+        this.jPanelSouth.setVisible(b);
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -105,12 +160,12 @@ public class CardViewer extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        jPanelCenter = new javax.swing.JPanel();
+        jPanelWest = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        jPanelEast = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
+        jPanelSouth = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -121,11 +176,11 @@ public class CardViewer extends javax.swing.JPanel {
         });
         setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setMinimumSize(new java.awt.Dimension(10, 97));
-        jPanel1.setPreferredSize(new java.awt.Dimension(100, 97));
-        add(jPanel1, java.awt.BorderLayout.CENTER);
+        jPanelCenter.setMinimumSize(new java.awt.Dimension(10, 97));
+        jPanelCenter.setPreferredSize(new java.awt.Dimension(100, 97));
+        add(jPanelCenter, java.awt.BorderLayout.CENTER);
 
-        jPanel2.setLayout(new java.awt.CardLayout());
+        jPanelWest.setLayout(new java.awt.CardLayout());
 
         jButton1.setText("<");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -133,11 +188,11 @@ public class CardViewer extends javax.swing.JPanel {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton1, "card2");
+        jPanelWest.add(jButton1, "card2");
 
-        add(jPanel2, java.awt.BorderLayout.WEST);
+        add(jPanelWest, java.awt.BorderLayout.WEST);
 
-        jPanel3.setLayout(new java.awt.CardLayout());
+        jPanelEast.setLayout(new java.awt.CardLayout());
 
         jButton2.setText(">");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -145,14 +200,14 @@ public class CardViewer extends javax.swing.JPanel {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel3.add(jButton2, "card2");
+        jPanelEast.add(jButton2, "card2");
 
-        add(jPanel3, java.awt.BorderLayout.EAST);
+        add(jPanelEast, java.awt.BorderLayout.EAST);
 
         jLabel1.setText("jLabel1");
-        jPanel4.add(jLabel1);
+        jPanelSouth.add(jLabel1);
 
-        add(jPanel4, java.awt.BorderLayout.SOUTH);
+        add(jPanelSouth, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
@@ -180,9 +235,9 @@ public class CardViewer extends javax.swing.JPanel {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanelCenter;
+    private javax.swing.JPanel jPanelEast;
+    private javax.swing.JPanel jPanelSouth;
+    private javax.swing.JPanel jPanelWest;
     // End of variables declaration//GEN-END:variables
 }

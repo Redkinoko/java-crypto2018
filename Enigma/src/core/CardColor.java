@@ -17,21 +17,24 @@ public class CardColor {
     private char pre;
     private Color color;
     private char icon;
+    private int value;
     
     public CardColor()
     {
         this.name   = "default";
         this.pre    = '\0';
         this.color  = Color.BLACK;
-        this.icon = '☻';
+        this.icon   = '☻';
+        this.value  = 0;
     }
     
     public CardColor(String name, char pre, Color color)
     {
-        this.name       = name;
-        this.pre        = pre;
-        this.color      = color;
+        this.name   = name;
+        this.pre    = pre;
+        this.color  = color;
         this.icon   = ' ';
+        this.value  = 0;
     }
 
     public String getName() {
@@ -55,9 +58,19 @@ public class CardColor {
         return this;
     }
     
+    public int getValue() {
+        return value;
+    }
+
+    public CardColor setValue(int value) {
+        this.value = value;
+        return this;
+    }
+    
     @Override
     public String toString()
     {
         return (this.icon == ' ')?this.name:("" + this.icon);
     }
+    
 }
