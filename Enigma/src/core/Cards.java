@@ -48,6 +48,9 @@ public class Cards {
         }
     }
     
+    /*
+    
+    */
     public void generate(CardColor color, int min, int max)
     {
         for(int i=min ; i<=max ; i++)
@@ -56,6 +59,9 @@ public class Cards {
         }
     }
     
+    /*
+    
+    */
     public void show()
     {
         for(int i=0 ; i<this.count ; i++)
@@ -70,6 +76,9 @@ public class Cards {
         return this.count;
     }
     
+    /*
+    
+    */
     public void switchCards(int i, int j)
     {
         if(i >= 0 && i < this.count && j >= 0 && j < this.count)
@@ -80,6 +89,9 @@ public class Cards {
         }
     }
     
+    /*
+    
+    */
     public void moveTo(int i, int j)
     {
         if(i >= 0 && i < this.count && j >= 0 && j < this.count)
@@ -101,6 +113,9 @@ public class Cards {
         }
     }
     
+    /*
+    
+    */
     public void pushDown(int i, int j)
     {
         //si moins de 2 cartes
@@ -114,6 +129,9 @@ public class Cards {
         }
     }
     
+    /*
+    Mélange les cartes de façon aléatoire
+    */
     public void mix()
     {
         int max = this.count();
@@ -126,6 +144,9 @@ public class Cards {
         }
     }
     
+    /*
+    Retourne un entier qui est le numéro d'index du Joker Noir
+    */
     public int getBlackJokerIndex()
     {
         CardFinderObject bj = new CardFinder(this)
@@ -136,6 +157,9 @@ public class Cards {
         return (bj != null)?bj.getIndex():-1;
     }
     
+    /*
+    Retourne un entier qui est le numéro d'index du Joker Rouge
+    */
     public int getRedJokerIndex()
     {
         CardFinderObject bj = new CardFinder(this)
@@ -146,6 +170,9 @@ public class Cards {
         return (bj != null)?bj.getIndex():-1;
     }
     
+    /*
+    Méthode qui récupère la position des deux jokers et les utilise pour appeler la fonction de double coupe
+    */
     public void generateJokerCut()
     {
         int B = this.getBlackJokerIndex();
@@ -161,6 +188,11 @@ public class Cards {
         }
     }
     
+    /*
+    Méthode effectuant une double coupe du paquet par rapport aux positions des deux jokers.
+    Les cartes au-dessus du premier joker passent sous le second et inversement.
+    Le premier est celui arrivant en premier lors du parcours des cartes.
+    */
     private void jokerCut(int a, int b)
     {
         Card[] res = new Card[max];
@@ -189,6 +221,28 @@ public class Cards {
                 ind++;
             }
         }
+        
+        this.cards = res;
+    }
+    
+    /*
+    Coupe par rapport à la valeur de la dernière carte.
+    On déplace le nombre de cartes désignées, depuis le dessus du paquet, par la valeur de la dernière carte au dessus de cette dernière
+    */
+    public void cutFromLast()
+    {
+        Card[] res = new Card[max];
+        int nb = this.get(max).getTotalValue();
+        
+        for(int i=nb;i<max-1;i++)
+        {
+            res[i-nb]=this.cards[i];
+        }
+        for(int i=0;i<nb;i++)
+        {
+            res[i+nb]=this.cards[i];
+        }
+        res[max]=this.cards[max];
         
         this.cards = res;
     }

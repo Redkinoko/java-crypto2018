@@ -51,13 +51,24 @@ public class App extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        toEncrypt = new javax.swing.JLabel();
+        textToEncrypt = new javax.swing.JTextField();
+        jPanel7 = new javax.swing.JPanel();
+        encryptButton = new javax.swing.JButton();
+        encrypted = new javax.swing.JLabel();
+        encryptedText = new javax.swing.JTextField();
+        jPanel6 = new javax.swing.JPanel();
+        fromEncrypted = new javax.swing.JLabel();
+        textToDecrypt = new javax.swing.JTextField();
+        jPanel5 = new javax.swing.JPanel();
+        decryptButton = new javax.swing.JButton();
+        decrypted = new javax.swing.JLabel();
+        decryptedText = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1, 1));
-        setPreferredSize(new java.awt.Dimension(0, 0));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.setMinimumSize(new java.awt.Dimension(1, 1));
@@ -73,8 +84,58 @@ public class App extends javax.swing.JFrame {
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.EAST);
 
-        jLabel2.setText("jLabel2");
-        jPanel3.add(jLabel2);
+        jPanel3.setLayout(new java.awt.GridLayout(11, 1));
+
+        toEncrypt.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        toEncrypt.setText(" Message à chiffrer");
+        toEncrypt.setAlignmentX(0.5F);
+        jPanel3.add(toEncrypt);
+
+        textToEncrypt.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel3.add(textToEncrypt);
+
+        jPanel7.setLayout(new java.awt.BorderLayout());
+
+        encryptButton.setText("Chiffrer");
+        encryptButton.setMaximumSize(new java.awt.Dimension(81, 23));
+        encryptButton.setMinimumSize(new java.awt.Dimension(81, 23));
+        encryptButton.setPreferredSize(new java.awt.Dimension(81, 23));
+        encryptButton.setRequestFocusEnabled(false);
+        jPanel7.add(encryptButton, java.awt.BorderLayout.LINE_START);
+
+        jPanel3.add(jPanel7);
+
+        encrypted.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        encrypted.setText(" Message chiffré");
+        jPanel3.add(encrypted);
+
+        encryptedText.setEditable(false);
+        encryptedText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                encryptedTextActionPerformed(evt);
+            }
+        });
+        jPanel3.add(encryptedText);
+        jPanel3.add(jPanel6);
+
+        fromEncrypted.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        fromEncrypted.setText(" Message à déchiffrer");
+        jPanel3.add(fromEncrypted);
+        jPanel3.add(textToDecrypt);
+
+        jPanel5.setLayout(new java.awt.BorderLayout());
+
+        decryptButton.setText("Déchiffrer");
+        jPanel5.add(decryptButton, java.awt.BorderLayout.LINE_START);
+
+        jPanel3.add(jPanel5);
+
+        decrypted.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        decrypted.setText(" Message déchiffré");
+        jPanel3.add(decrypted);
+
+        decryptedText.setEditable(false);
+        jPanel3.add(decryptedText);
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
 
@@ -87,6 +148,10 @@ public class App extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void encryptedTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encryptedTextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_encryptedTextActionPerformed
 
     /**
      * @param args the command line arguments
@@ -124,12 +189,24 @@ public class App extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton decryptButton;
+    private javax.swing.JLabel decrypted;
+    private javax.swing.JTextField decryptedText;
+    private javax.swing.JButton encryptButton;
+    private javax.swing.JLabel encrypted;
+    private javax.swing.JTextField encryptedText;
+    private javax.swing.JLabel fromEncrypted;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JTextField textToDecrypt;
+    private javax.swing.JTextField textToEncrypt;
+    private javax.swing.JLabel toEncrypt;
     // End of variables declaration//GEN-END:variables
 }
