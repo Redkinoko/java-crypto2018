@@ -246,4 +246,27 @@ public class Cards {
         
         this.cards = res;
     }
+    
+    /*
+    Fonction retournant une valeur de clef pour le chiffrement
+    Utilise la valeur de la première carte pour aller chercher une autre carte
+    dans le paquet dont la valeur modulo 26 sera le caractère utilisé.
+    Rencontrer un Joker relance les opérations précédentes sans donner de valeur
+    */
+    public int nextKey()
+    {
+        int first = this.cards[0].getTotalValue();
+        int preKey = this.cards[first].getTotalValue();
+        
+        if(preKey == 53)
+        {
+            //RELANCER LES OPERATIONS
+        }
+        else
+        {
+            return preKey%26;
+        }
+        
+        return -1;
+    }
 }
