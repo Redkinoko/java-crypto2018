@@ -255,12 +255,14 @@ public class Cards {
     */
     public int nextKey()
     {
+        useSteps();
+        
         int first = this.cards[0].getTotalValue();
         int preKey = this.cards[first].getTotalValue();
         
         if(preKey == 53)
         {
-            //RELANCER LES OPERATIONS
+            nextKey();
         }
         else
         {
@@ -268,5 +270,16 @@ public class Cards {
         }
         
         return -1;
+    }
+    
+    public void useSteps()
+    {
+        mix();
+        int indJ = getBlackJokerIndex();
+        pushDown(indJ, 1);
+        indJ = getRedJokerIndex();
+        pushDown(indJ,2);
+        generateJokerCut();
+        cutFromLast();
     }
 }
