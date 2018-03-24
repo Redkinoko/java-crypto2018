@@ -37,6 +37,7 @@ public class Main {
         cards.generate(spade,   1, 13);
         cards.generate(jokerBlack, 14, 14);
         cards.generate(jokerRed, 15, 15);
+        cards.saveCurrentState();
         
         //CREATION DE L'ENCODEUR
         Encoder encoder = new Encoder(cards);
@@ -47,13 +48,9 @@ public class Main {
         //CREATION DE L'APPLICATION PRINCIPALE
         App app = new App(encoder);
         app.setTitle("java-crypto2018 - M1 - 2017/2018 - Projet Cryptographie et jeu de cartes");
-        app.addToJPanel1(cw);
+        app.setCardViewer(cw);
         app.setVisible(true);
     }
-    
-    private static void printf(String s)
-    {
-        System.out.print(s);
-    }
+
     
 }
