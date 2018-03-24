@@ -8,10 +8,8 @@ package view;
 import core.Card;
 import core.Cards;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 
 /**
  *
@@ -20,6 +18,7 @@ import java.awt.Rectangle;
 public class CardViewer extends javax.swing.JPanel {
 
     private Cards cards;
+
     private int rows;
     private int cols;
     private int index;
@@ -43,7 +42,7 @@ public class CardViewer extends javax.swing.JPanel {
         int h = marginTop+126+marginBottom;
         this.jPanelCenter.setPreferredSize(new Dimension(w, h));
     }
-
+    
     @Override
     public void paint(Graphics g)
     {

@@ -38,20 +38,16 @@ public class Main {
         cards.generate(jokerBlack, 14, 14);
         cards.generate(jokerRed, 15, 15);
         
-        //AFFICHAGE DU DECK
-        //cards.show();
+        //CREATION DE L'ENCODEUR
+        Encoder encoder = new Encoder(cards);
         
-        App app = new App();
+        //CREATION DU PANEL DE VISUALISATION DES CARTES
+        CardViewer cw   = new CardViewer(cards);
+        
+        //CREATION DE L'APPLICATION PRINCIPALE
+        App app = new App(encoder);
         app.setTitle("java-crypto2018 - M1 - 2017/2018 - Projet Cryptographie et jeu de cartes");
-
-        CardViewer cw = new CardViewer(cards);
         app.addToJPanel1(cw);
-        
-        int bj = cards.getRedJokerIndex();
-        cards.pushDown(bj, 1);
-        //cards.mix();
-        cw.repaint();
-        printf("Le joker rouge est à la position " + (bj+1) + "/" + (cards.count()) + ".\n");
         app.setVisible(true);
     }
     

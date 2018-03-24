@@ -6,32 +6,55 @@
 package core;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
 
 /**
  *
  * @author Red
  */
 public class Cards {
+    
     private int count;
     private int max;
     private Card[] cards;
+    private Cards backup;
     
     public Cards()
     {
-        this.cards   = null;
-        this.count   = 0;
-        this.max     = 0;
+        this.cards    = null;
+        this.count    = 0;
+        this.max      = 0;
+        this.backup   = null;
     }
     
     public Cards(int max)
     {
-        this.max    = max;
-        this.count  = 0;
-        this.cards = new Card[max];
+        this.max      = max;
+        this.count    = 0;
+        this.cards    = new Card[max];
+        this.backup   = null;
+    }
+    
+    public Cards(Cards cards)
+    {
+        this.max    = cards.max;
+        this.count  = cards.count;
+        this.cards  = new Card[max];
+        System.arraycopy(cards.cards, 0, this.cards, 0, cards.cards.length);
+        this.backup = null;
+    }
+    
+    public void saveCurrentState()
+    {
+        this.backup = new Cards(this);
+    }
+    
+    public void loadBackup()
+    {
+        this.max    = backup.max;
+        this.count  = backup.count;
+        this.cards  = new Card[max];
+        System.arraycopy(backup.cards, 0, this.cards, 0, backup.cards.length);
+        this.backup = null;
     }
     
     public Card get(int i)
@@ -231,20 +254,32 @@ public class Cards {
     */
     public void cutFromLast()
     {
-        Card[] res = new Card[max];
-        int nb = this.get(max).getTotalValue();
-        
-        for(int i=nb;i<max-1;i++)
+        Card[] res = new Card[count];
+        int nb = this.get(count-1).getTotalValue();
+
+        for(int i=nb ; i < count-1 ; i++)
         {
-            res[i-nb]=this.cards[i];
+            res[i-nb] = this.cards[i];
         }
-        for(int i=0;i<nb;i++)
+        for(int i=0 ; i < nb ; i++)
         {
-            res[i+nb]=this.cards[i];
+            res[i+(count-nb-1)] = this.cards[i];
         }
-        res[max]=this.cards[max];
-        
+        res[count-1] = this.cards[count-1];
+
         this.cards = res;
+    }
+    
+    public void useSteps()
+    {
+        //mix();
+        int indJ = getBlackJokerIndex();
+        pushDown(indJ, 1);
+        
+        indJ = getRedJokerIndex();
+        pushDown(indJ,2);
+        generateJokerCut();
+        cutFromLast();
     }
     
     /*
@@ -256,30 +291,23 @@ public class Cards {
     public int nextKey()
     {
         useSteps();
-        
+
         int first = this.cards[0].getTotalValue();
-        int preKey = this.cards[first].getTotalValue();
         
+        int preKey = this.cards[first].getTotalValue();
         if(preKey == 53)
         {
-            nextKey();
-        }
-        else
-        {
-            return preKey%26;
+            return nextKey();
         }
         
-        return -1;
+        return preKey%26;
     }
     
-    public void useSteps()
+    public char nextKeyToChar()
     {
-        mix();
-        int indJ = getBlackJokerIndex();
-        pushDown(indJ, 1);
-        indJ = getRedJokerIndex();
-        pushDown(indJ,2);
-        generateJokerCut();
-        cutFromLast();
+        int i = nextKey();
+        return (char)('a' + nextKey());
     }
+    
+    
 }

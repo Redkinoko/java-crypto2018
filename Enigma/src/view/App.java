@@ -5,6 +5,8 @@
  */
 package view;
 
+import core.Cards;
+import core.Encoder;
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -13,15 +15,24 @@ import java.awt.Dimension;
  * @author Red
  */
 public class App extends javax.swing.JFrame {
-
+    
+    private Encoder encoder;
+    private CardViewer cardViewer;
     /**
      * Creates new form App
      */
     public App() {
         initComponents();
+        cardViewer = null;
     }
     
-    public Component addToJPanel1(Component comp)
+    public App(Encoder encoder) {
+        initComponents();
+        cardViewer = null;
+        this.encoder = encoder;
+    }
+    
+    public void addToJPanel1(CardViewer comp)
     {
         this.jPanel1.add(comp);
         int w = (this.getWidth() + comp.getPreferredSize().width);//171
@@ -34,8 +45,6 @@ public class App extends javax.swing.JFrame {
         Dimension d2 = new Dimension(w + this.getMinimumSize().width, h + this.getMinimumSize().height);
         this.setMinimumSize(d2);
         this.setPreferredSize(d2);
-        
-        return comp;
     }
     
     /**
@@ -101,6 +110,11 @@ public class App extends javax.swing.JFrame {
         encryptButton.setMinimumSize(new java.awt.Dimension(81, 23));
         encryptButton.setPreferredSize(new java.awt.Dimension(81, 23));
         encryptButton.setRequestFocusEnabled(false);
+        encryptButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                encryptButtonActionPerformed(evt);
+            }
+        });
         jPanel7.add(encryptButton, java.awt.BorderLayout.LINE_START);
 
         jPanel3.add(jPanel7);
@@ -110,11 +124,6 @@ public class App extends javax.swing.JFrame {
         jPanel3.add(encrypted);
 
         encryptedText.setEditable(false);
-        encryptedText.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                encryptedTextActionPerformed(evt);
-            }
-        });
         jPanel3.add(encryptedText);
         jPanel3.add(jPanel6);
 
@@ -126,6 +135,11 @@ public class App extends javax.swing.JFrame {
         jPanel5.setLayout(new java.awt.BorderLayout());
 
         decryptButton.setText("Déchiffrer");
+        decryptButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                decryptButtonActionPerformed(evt);
+            }
+        });
         jPanel5.add(decryptButton, java.awt.BorderLayout.LINE_START);
 
         jPanel3.add(jPanel5);
@@ -149,9 +163,23 @@ public class App extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void encryptedTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encryptedTextActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_encryptedTextActionPerformed
+    private void encryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encryptButtonActionPerformed
+        String tmp = textToEncrypt.getText();
+        if(!tmp.equals(""))
+        {
+            tmp = encoder.encrypt(tmp);
+            this.encryptedText.setText(tmp);
+        }
+    }//GEN-LAST:event_encryptButtonActionPerformed
+
+    private void decryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decryptButtonActionPerformed
+        String tmp = textToDecrypt.getText();
+        if(!tmp.equals(""))
+        {
+            tmp = encoder.decrypt(tmp);
+            this.decryptedText.setText(tmp);
+        }
+    }//GEN-LAST:event_decryptButtonActionPerformed
 
     /**
      * @param args the command line arguments
