@@ -32,11 +32,12 @@ public class App extends javax.swing.JFrame {
         this.encoder = encoder;
     }
     
-    public void addToJPanel1(CardViewer comp)
+    public void setCardViewer(CardViewer cv)
     {
-        this.jPanel1.add(comp);
-        int w = (this.getWidth() + comp.getPreferredSize().width);//171
-        int h = (this.getHeight() + comp.getPreferredSize().height);//144
+        this.cardViewer = cv;
+        this.jPanel1.add(cv);
+        int w = (this.getWidth() + cv.getPreferredSize().width);//171
+        int h = (this.getHeight() + cv.getPreferredSize().height);//144
 
         Dimension d = new Dimension(w, h);
         this.jPanel1.setPreferredSize(d);
@@ -164,21 +165,23 @@ public class App extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void encryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encryptButtonActionPerformed
-        String tmp = textToEncrypt.getText();
+        String tmp = textToEncrypt.getText().toUpperCase();
         if(!tmp.equals(""))
         {
             tmp = encoder.encrypt(tmp);
             this.encryptedText.setText(tmp);
         }
+        this.cardViewer.repaint();
     }//GEN-LAST:event_encryptButtonActionPerformed
 
     private void decryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decryptButtonActionPerformed
-        String tmp = textToDecrypt.getText();
+        String tmp = textToDecrypt.getText().toUpperCase();
         if(!tmp.equals(""))
         {
             tmp = encoder.decrypt(tmp);
             this.decryptedText.setText(tmp);
         }
+        this.cardViewer.repaint();
     }//GEN-LAST:event_decryptButtonActionPerformed
 
     /**

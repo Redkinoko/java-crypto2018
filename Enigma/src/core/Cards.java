@@ -34,13 +34,13 @@ public class Cards {
         this.backup   = null;
     }
     
-    public Cards(Cards cards)
+    public Cards(Cards c)
     {
-        this.max    = cards.max;
-        this.count  = cards.count;
-        this.cards  = new Card[max];
-        System.arraycopy(cards.cards, 0, this.cards, 0, cards.cards.length);
-        this.backup = null;
+        max    = c.max;
+        count  = c.count;
+        cards  = new Card[max];
+        System.arraycopy(c.cards, 0, cards, 0, c.cards.length);
+        backup = null;
     }
     
     public void saveCurrentState()
@@ -50,11 +50,13 @@ public class Cards {
     
     public void loadBackup()
     {
-        this.max    = backup.max;
-        this.count  = backup.count;
-        this.cards  = new Card[max];
-        System.arraycopy(backup.cards, 0, this.cards, 0, backup.cards.length);
-        this.backup = null;
+        if(backup != null)
+        {
+            max    = backup.max;
+            count  = backup.count;
+            cards  = new Card[max];
+            System.arraycopy(backup.cards, 0, cards, 0, backup.cards.length);
+        }
     }
     
     public Card get(int i)
@@ -302,12 +304,5 @@ public class Cards {
         
         return preKey%26;
     }
-    
-    public char nextKeyToChar()
-    {
-        int i = nextKey();
-        return (char)('a' + nextKey());
-    }
-    
     
 }
