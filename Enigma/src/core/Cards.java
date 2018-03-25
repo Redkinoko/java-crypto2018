@@ -15,6 +15,9 @@ public class Cards {
     
     private int count;
     private int max;
+    private int nbColors;
+    private int maxCardValue;
+    private CardColor[] colors;
     private Card[] cards;
     private Cards backup;
     
@@ -24,6 +27,9 @@ public class Cards {
         this.count    = 0;
         this.max      = 0;
         this.backup   = null;
+        this.nbColors = 0;
+        this.colors   = null;
+        this.maxCardValue = 0;
     }
     
     public Cards(int max)
@@ -32,6 +38,9 @@ public class Cards {
         this.count    = 0;
         this.cards    = new Card[max];
         this.backup   = null;
+        this.nbColors = 0;
+        this.colors   = new CardColor[max];
+        this.maxCardValue = 0;
     }
     
     public Cards(Cards c)
@@ -39,7 +48,11 @@ public class Cards {
         max    = c.max;
         count  = c.count;
         cards  = new Card[max];
+        nbColors = c.nbColors;
+        colors   = new CardColor[max];
+        maxCardValue = c.maxCardValue;
         System.arraycopy(c.cards, 0, cards, 0, c.cards.length);
+        System.arraycopy(c.colors, 0, colors, 0, c.colors.length);
         backup = null;
     }
     
@@ -55,7 +68,11 @@ public class Cards {
             max    = backup.max;
             count  = backup.count;
             cards  = new Card[max];
+            nbColors = backup.nbColors;
+            colors   = new CardColor[max];
+            maxCardValue = backup.maxCardValue;
             System.arraycopy(backup.cards, 0, cards, 0, backup.cards.length);
+            System.arraycopy(backup.colors, 0, colors, 0, backup.colors.length);
         }
     }
     
@@ -64,12 +81,21 @@ public class Cards {
         return this.cards[i];
     }
     
-    public void add(Card card)
+    public void addCard(Card card)
     {
         if(this.count < this.max)
         {
             this.cards[this.count] = card;
             this.count++;
+        }
+    }
+    
+    public void addColor(CardColor color)
+    {
+        if(this.nbColors < this.max)
+        {
+            this.colors[this.nbColors] = color;
+            this.nbColors++;
         }
     }
     
@@ -80,7 +106,12 @@ public class Cards {
     {
         for(int i=min ; i<=max ; i++)
         {
-            this.add(new Card(color, i));
+            this.addCard(new Card(color, i));
+        }
+        this.addColor(color);
+        if(this.maxCardValue < max)
+        {
+            this.maxCardValue = max;
         }
     }
     
@@ -157,7 +188,7 @@ public class Cards {
     /*
     Mélange les cartes de façon aléatoire
     */
-    public void mix()
+    public void randomMix()
     {
         int max = this.count();
         int min = 0;
@@ -167,6 +198,44 @@ public class Cards {
             int rnd = (int)(Math.random()*(max-min) + min);
             this.switchCards(i, rnd);
         }
+    }
+    
+    public void colorMix()
+    {
+        randomMix();
+        Card[] cs = new Card[max];
+        int nb = 0;
+        for(int i=0 ; i<this.nbColors ; i++)
+        {
+            for(int j=0 ; j<this.count ; j++)
+            {
+                if(cards[j].getColor().equals(this.colors[i]))
+                {
+                    cs[nb] = cards[j];
+                    nb++;
+                }
+            }
+        }
+        cards = cs;
+    }
+    
+    public void valueMix()
+    {
+        randomMix();
+        Card[] cs = new Card[max];
+        int nb = 0;
+        for(int i=0 ; i<=this.maxCardValue ; i++)
+        {
+            for(int j=0 ; j<this.count ; j++)
+            {
+                if(cards[j] != null && cards[j].getValue() == i)
+                {
+                    cs[nb] = cards[j];
+                    nb++;
+                }
+            }
+        }
+        cards = cs;
     }
     
     /*

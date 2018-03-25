@@ -73,4 +73,19 @@ public class CardColor {
         return (this.icon == ' ')?this.name:("" + this.icon);
     }
     
+    @Override
+    public boolean equals(Object ob)
+    {
+        CardColor cc = (CardColor)ob;
+        return (cc != null)?equals(cc):false;
+    }
+    
+    public boolean equals(CardColor cc)
+    {
+        return (cc!= null &&
+                color == cc.color && 
+                value == cc.value && 
+                name.toLowerCase().equals(cc.name.toLowerCase())
+        );
+    }
 }

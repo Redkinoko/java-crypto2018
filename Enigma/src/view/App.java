@@ -16,6 +16,7 @@ import java.awt.Dimension;
  */
 public class App extends javax.swing.JFrame {
     
+    private Cards cards;
     private Encoder encoder;
     private CardViewer cardViewer;
     /**
@@ -23,16 +24,20 @@ public class App extends javax.swing.JFrame {
      */
     public App() {
         initComponents();
-        cardViewer = null;
+        this.cards      = null;
+        this.encoder    = null;
+        this.cardViewer = null;
     }
     
-    public App(Encoder encoder) {
+    public App(Cards cards, Encoder encoder, CardViewer cv) {
         initComponents();
-        cardViewer = null;
-        this.encoder = encoder;
+        this.cards      = cards;
+        this.encoder    = encoder;
+        this.cardViewer = cv;
+        setCardViewer(cv);
     }
     
-    public void setCardViewer(CardViewer cv)
+    private void setCardViewer(CardViewer cv)
     {
         this.cardViewer = cv;
         this.jPanel1.add(cv);
@@ -76,6 +81,15 @@ public class App extends javax.swing.JFrame {
         decryptedText = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
+        mixColors = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        mixValues = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        mix = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        manual = new javax.swing.JToggleButton();
+        jLabel6 = new javax.swing.JLabel();
+        backup = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1, 1));
@@ -154,10 +168,66 @@ public class App extends javax.swing.JFrame {
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Mélanger"));
+        jPanel4.setLayout(new java.awt.GridLayout(10, 0, 1, 0));
 
-        jLabel3.setText("jLabel3");
+        jLabel3.setText("Par couleurs :");
         jPanel4.add(jLabel3);
+
+        mixColors.setText("Mélanger");
+        mixColors.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mixColorsActionPerformed(evt);
+            }
+        });
+        jPanel4.add(mixColors);
+
+        jLabel4.setText("Par valeurs :");
+        jPanel4.add(jLabel4);
+
+        mixValues.setText("Mélanger");
+        mixValues.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mixValuesActionPerformed(evt);
+            }
+        });
+        jPanel4.add(mixValues);
+
+        jLabel2.setText("Aléatoire :");
+        jPanel4.add(jLabel2);
+
+        mix.setText("Mélanger");
+        mix.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mixActionPerformed(evt);
+            }
+        });
+        jPanel4.add(mix);
+
+        jLabel5.setText("Manuellement :");
+        jPanel4.add(jLabel5);
+
+        manual.setText("Activer");
+        manual.setMaximumSize(new java.awt.Dimension(100, 23));
+        manual.setMinimumSize(new java.awt.Dimension(100, 23));
+        manual.setPreferredSize(new java.awt.Dimension(100, 23));
+        manual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                manualActionPerformed(evt);
+            }
+        });
+        jPanel4.add(manual);
+
+        jLabel6.setText("défaut :");
+        jPanel4.add(jLabel6);
+
+        backup.setText("Défaut");
+        backup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backupActionPerformed(evt);
+            }
+        });
+        jPanel4.add(backup);
 
         getContentPane().add(jPanel4, java.awt.BorderLayout.WEST);
 
@@ -183,6 +253,32 @@ public class App extends javax.swing.JFrame {
         }
         this.cardViewer.repaint();
     }//GEN-LAST:event_decryptButtonActionPerformed
+
+    private void mixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mixActionPerformed
+        this.cards.randomMix();
+        this.cardViewer.repaint();
+    }//GEN-LAST:event_mixActionPerformed
+
+    private void mixColorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mixColorsActionPerformed
+        this.cards.colorMix();
+        this.cardViewer.repaint();
+    }//GEN-LAST:event_mixColorsActionPerformed
+
+    private void mixValuesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mixValuesActionPerformed
+        this.cards.valueMix();
+        this.cardViewer.repaint();
+    }//GEN-LAST:event_mixValuesActionPerformed
+
+    private void manualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manualActionPerformed
+        String tmp = this.manual.isSelected()?"Désactiver":"Activer";
+        this.manual.setText(tmp);
+        this.cardViewer.repaint();
+    }//GEN-LAST:event_manualActionPerformed
+
+    private void backupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backupActionPerformed
+        this.cards.loadBackup();
+        this.cardViewer.repaint();
+    }//GEN-LAST:event_backupActionPerformed
 
     /**
      * @param args the command line arguments
@@ -220,6 +316,7 @@ public class App extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backup;
     private javax.swing.JButton decryptButton;
     private javax.swing.JLabel decrypted;
     private javax.swing.JTextField decryptedText;
@@ -228,7 +325,11 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JTextField encryptedText;
     private javax.swing.JLabel fromEncrypted;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -236,6 +337,10 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JToggleButton manual;
+    private javax.swing.JButton mix;
+    private javax.swing.JButton mixColors;
+    private javax.swing.JButton mixValues;
     private javax.swing.JTextField textToDecrypt;
     private javax.swing.JTextField textToEncrypt;
     private javax.swing.JLabel toEncrypt;
