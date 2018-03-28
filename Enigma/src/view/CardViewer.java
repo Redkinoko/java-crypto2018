@@ -10,6 +10,7 @@ import core.Cards;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 
 /**
  *
@@ -177,6 +178,11 @@ public class CardViewer extends javax.swing.JPanel {
 
         jPanelCenter.setMinimumSize(new java.awt.Dimension(10, 97));
         jPanelCenter.setPreferredSize(new java.awt.Dimension(100, 97));
+        jPanelCenter.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanelCenterMouseClicked(evt);
+            }
+        });
         add(jPanelCenter, java.awt.BorderLayout.CENTER);
 
         jPanelWest.setLayout(new java.awt.CardLayout());
@@ -237,6 +243,10 @@ public class CardViewer extends javax.swing.JPanel {
         
         this.repaint();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jPanelCenterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelCenterMouseClicked
+        System.out.println("x:" + evt.getX() + " y:" + evt.getY());
+    }//GEN-LAST:event_jPanelCenterMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -66,29 +66,21 @@ public class App extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        toEncrypt = new javax.swing.JLabel();
-        textToEncrypt = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
         encryptButton = new javax.swing.JButton();
-        encrypted = new javax.swing.JLabel();
-        encryptedText = new javax.swing.JTextField();
+        textToEncrypt = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
-        fromEncrypted = new javax.swing.JLabel();
-        textToDecrypt = new javax.swing.JTextField();
+        encryptedText = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         decryptButton = new javax.swing.JButton();
-        decrypted = new javax.swing.JLabel();
+        textToDecrypt = new javax.swing.JTextField();
+        jPanel8 = new javax.swing.JPanel();
         decryptedText = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
         mixColors = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
         mixValues = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
         mix = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        manual = new javax.swing.JToggleButton();
-        jLabel6 = new javax.swing.JLabel();
         backup = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -108,73 +100,65 @@ public class App extends javax.swing.JFrame {
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.EAST);
 
-        jPanel3.setLayout(new java.awt.GridLayout(11, 1));
+        jPanel3.setLayout(new java.awt.GridLayout(4, 1, 1, 3));
 
-        toEncrypt.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        toEncrypt.setText(" Message à chiffrer");
-        toEncrypt.setAlignmentX(0.5F);
-        jPanel3.add(toEncrypt);
-
-        textToEncrypt.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-        jPanel3.add(textToEncrypt);
-
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Message à chiffrer"));
         jPanel7.setLayout(new java.awt.BorderLayout());
 
         encryptButton.setText("Chiffrer");
         encryptButton.setMaximumSize(new java.awt.Dimension(81, 23));
         encryptButton.setMinimumSize(new java.awt.Dimension(81, 23));
-        encryptButton.setPreferredSize(new java.awt.Dimension(81, 23));
+        encryptButton.setPreferredSize(new java.awt.Dimension(105, 23));
         encryptButton.setRequestFocusEnabled(false);
         encryptButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 encryptButtonActionPerformed(evt);
             }
         });
-        jPanel7.add(encryptButton, java.awt.BorderLayout.LINE_START);
+        jPanel7.add(encryptButton, java.awt.BorderLayout.LINE_END);
+
+        textToEncrypt.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel7.add(textToEncrypt, java.awt.BorderLayout.CENTER);
 
         jPanel3.add(jPanel7);
 
-        encrypted.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        encrypted.setText(" Message chiffré");
-        jPanel3.add(encrypted);
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Message chiffré"));
+        jPanel6.setLayout(new java.awt.BorderLayout());
 
         encryptedText.setEditable(false);
-        jPanel3.add(encryptedText);
+        jPanel6.add(encryptedText, java.awt.BorderLayout.CENTER);
+
         jPanel3.add(jPanel6);
 
-        fromEncrypted.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        fromEncrypted.setText(" Message à déchiffrer");
-        jPanel3.add(fromEncrypted);
-        jPanel3.add(textToDecrypt);
-
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Message à déchiffrer"));
         jPanel5.setLayout(new java.awt.BorderLayout());
 
         decryptButton.setText("Déchiffrer");
+        decryptButton.setPreferredSize(new java.awt.Dimension(105, 25));
         decryptButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 decryptButtonActionPerformed(evt);
             }
         });
-        jPanel5.add(decryptButton, java.awt.BorderLayout.LINE_START);
+        jPanel5.add(decryptButton, java.awt.BorderLayout.LINE_END);
+        jPanel5.add(textToDecrypt, java.awt.BorderLayout.CENTER);
 
         jPanel3.add(jPanel5);
 
-        decrypted.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        decrypted.setText(" Message déchiffré");
-        jPanel3.add(decrypted);
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Message déchiffré"));
+        jPanel8.setLayout(new java.awt.BorderLayout());
 
         decryptedText.setEditable(false);
-        jPanel3.add(decryptedText);
+        jPanel8.add(decryptedText, java.awt.BorderLayout.CENTER);
+
+        jPanel3.add(jPanel8);
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Mélanger"));
         jPanel4.setLayout(new java.awt.GridLayout(10, 0, 1, 0));
 
-        jLabel3.setText("Par couleurs :");
-        jPanel4.add(jLabel3);
-
-        mixColors.setText("Mélanger");
+        mixColors.setText("Couleurs");
         mixColors.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mixColorsActionPerformed(evt);
@@ -182,10 +166,7 @@ public class App extends javax.swing.JFrame {
         });
         jPanel4.add(mixColors);
 
-        jLabel4.setText("Par valeurs :");
-        jPanel4.add(jLabel4);
-
-        mixValues.setText("Mélanger");
+        mixValues.setText("Valeurs");
         mixValues.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mixValuesActionPerformed(evt);
@@ -193,10 +174,7 @@ public class App extends javax.swing.JFrame {
         });
         jPanel4.add(mixValues);
 
-        jLabel2.setText("Aléatoire :");
-        jPanel4.add(jLabel2);
-
-        mix.setText("Mélanger");
+        mix.setText("Aléatoire");
         mix.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mixActionPerformed(evt);
@@ -204,22 +182,8 @@ public class App extends javax.swing.JFrame {
         });
         jPanel4.add(mix);
 
-        jLabel5.setText("Manuellement :");
+        jLabel5.setText(" ");
         jPanel4.add(jLabel5);
-
-        manual.setText("Activer");
-        manual.setMaximumSize(new java.awt.Dimension(100, 23));
-        manual.setMinimumSize(new java.awt.Dimension(100, 23));
-        manual.setPreferredSize(new java.awt.Dimension(100, 23));
-        manual.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                manualActionPerformed(evt);
-            }
-        });
-        jPanel4.add(manual);
-
-        jLabel6.setText("défaut :");
-        jPanel4.add(jLabel6);
 
         backup.setText("Défaut");
         backup.addActionListener(new java.awt.event.ActionListener() {
@@ -269,12 +233,6 @@ public class App extends javax.swing.JFrame {
         this.cardViewer.repaint();
     }//GEN-LAST:event_mixValuesActionPerformed
 
-    private void manualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manualActionPerformed
-        String tmp = this.manual.isSelected()?"Désactiver":"Activer";
-        this.manual.setText(tmp);
-        this.cardViewer.repaint();
-    }//GEN-LAST:event_manualActionPerformed
-
     private void backupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backupActionPerformed
         this.cards.loadBackup();
         this.cardViewer.repaint();
@@ -318,18 +276,11 @@ public class App extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backup;
     private javax.swing.JButton decryptButton;
-    private javax.swing.JLabel decrypted;
     private javax.swing.JTextField decryptedText;
     private javax.swing.JButton encryptButton;
-    private javax.swing.JLabel encrypted;
     private javax.swing.JTextField encryptedText;
-    private javax.swing.JLabel fromEncrypted;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -337,12 +288,11 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JToggleButton manual;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JButton mix;
     private javax.swing.JButton mixColors;
     private javax.swing.JButton mixValues;
     private javax.swing.JTextField textToDecrypt;
     private javax.swing.JTextField textToEncrypt;
-    private javax.swing.JLabel toEncrypt;
     // End of variables declaration//GEN-END:variables
 }
