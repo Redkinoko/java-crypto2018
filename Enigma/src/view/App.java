@@ -5,15 +5,10 @@
  */
 package view;
 
-import core.Card;
 import core.Cards;
 import core.Encoder;
 import java.awt.Dimension;
-import java.awt.Panel;
-import java.awt.Rectangle;
 import static java.lang.System.exit;
-import javax.swing.JLabel;
-import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
 
 /**
