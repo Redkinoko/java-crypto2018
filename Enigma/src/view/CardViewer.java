@@ -23,10 +23,20 @@ public class CardViewer extends javax.swing.JPanel {
     private int rows;
     private int cols;
     private int index;
-    private int marginTop       = 1;
-    private int marginBottom    = 13;
-    private int marginLeft      = 1;
-    private int marginRight     = 1;
+    private int marginTop;
+    private int marginBottom;
+    private int marginLeft;
+    private int marginRight;
+    private int originX;
+    private int originY;
+    private int maxX;
+    private int maxY;
+    private Point[] coords;
+    
+    private boolean mouseSelect;
+    private int mouseSelectX;
+    private int mouseSelectY;
+    private int cardSelected;
     /**
      * Creates new form CardViewer
      */
@@ -35,13 +45,28 @@ public class CardViewer extends javax.swing.JPanel {
     }
     public CardViewer(Cards cards) {
         initComponents();
-        this.cards = cards;
-        this.rows = 1;
-        this.cols = 1;
-        this.index = 0;
+        this.cards      = cards;
+        rows       = 1;
+        cols       = 1;
+        index      = 0;
+        marginTop       = 1;
+        marginBottom    = 13;
+        marginLeft      = 1;
+        marginRight     = 1;
+        maxX            = 0;
+        maxY            = 0;
         int w = (marginLeft + Card.WIDTH + marginRight)*6;
         int h = marginTop+126+marginBottom;
         this.jPanelCenter.setPreferredSize(new Dimension(w, h));
+        coords = new Point[cards.count()];
+        for(int i=0 ; i<cards.count() ; i++)
+        {
+            coords[i] = new Point(0,0);
+        }
+        mouseSelect     = false;
+        mouseSelectX    = 0;
+        mouseSelectY    = 0;
+        cardSelected    = -1;
     }
     
     @Override
@@ -55,19 +80,20 @@ public class CardViewer extends javax.swing.JPanel {
         {
             index = 0;
         }
+        originX = 5 + this.jPanelCenter.getX();
+        originY = 2 + this.jPanelCenter.getY();
+        maxX = (this.cols>1)?this.cols:this.rows;
+        maxY = (this.cols>1)?this.rows:this.cols;
         
         int k = index;
-        int originX = 5 + this.jPanelCenter.getX();
-        int originY = 2 + this.jPanelCenter.getY();
-        int maxX = (this.cols>1)?this.cols:this.rows;
-        int maxY = (this.cols>1)?this.rows:this.cols;
-        
+        int x = 0;
+        int y = 0;
         for(int i=0 ; i <maxX  ; i++)
         {
             for(int j=0 ; j<maxY ; j++)
             {
-                int x = originX + (i * (marginLeft + Card.WIDTH + marginRight));
-                int y = originY + (j * (marginTop + Card.HEIGHT + marginBottom));
+                x = originX + (i * (marginLeft + Card.WIDTH + marginRight));
+                y = originY + (j * (marginTop + Card.HEIGHT + marginBottom));
                 if(this.cols >1)
                 {
                     x = originX + (j * (marginLeft + Card.WIDTH + marginRight));
@@ -77,8 +103,17 @@ public class CardViewer extends javax.swing.JPanel {
                 {
                     //Afficher la carte n°k
                     drawCard(g, k, x, y);
+                    
                     //Afficher le cadre de légende
                     drawCardDesc(g, k, x, y+Card.HEIGHT);
+                    
+                    if(cardSelected > -1 && cardSelected == k)
+                    {
+                        g.setColor(Color.GREEN);
+                        g.drawRect(x, y, Card.WIDTH, Card.HEIGHT);
+                    }
+                    
+                    coords[k].setLocation(x, y);
                 }
                 k++;
             }
@@ -245,7 +280,39 @@ public class CardViewer extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jPanelCenterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelCenterMouseClicked
-        System.out.println("x:" + evt.getX() + " y:" + evt.getY());
+        int x = 0;
+        int y = 0;
+        int i = index;
+        mouseSelectX = evt.getX() + this.originX;
+        mouseSelectY = evt.getY() + this.originY;
+        mouseSelect = true;
+
+        while(mouseSelect && i<cards.count())
+        {
+            x = coords[i].x;
+            y = coords[i].y;
+            if(mouseSelectX >= x && mouseSelectX <= (x+Card.WIDTH) &&
+               mouseSelectY >= y && mouseSelectY <=(y+Card.HEIGHT))
+            {
+                if(cardSelected == i)
+                {
+                    cardSelected = -1;
+                }
+                else if(cardSelected > -1)
+                {
+                    cards.switchCards(cardSelected, i);
+                    cardSelected = -1;
+                    cards.saveCurrentState();
+                }
+                else
+                {
+                    cardSelected = i;
+                }
+                mouseSelect = false;
+            }
+            i++;
+        }
+        repaint();
     }//GEN-LAST:event_jPanelCenterMouseClicked
 
 

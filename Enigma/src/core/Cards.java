@@ -135,7 +135,7 @@ public class Cards {
     /*
     
     */
-    private void switchCards(int i, int j)
+    public void switchCards(int i, int j)
     {
         if(i >= 0 && i < this.count && j >= 0 && j < this.count)
         {
