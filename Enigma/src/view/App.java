@@ -30,7 +30,7 @@ public class App extends javax.swing.JFrame {
     public App(Cards cards, Encoder encoder, CardViewer cv) {
         initComponents();
         this.cards      = cards;
-        encoder    = encoder;
+        this.encoder    = encoder;
         cardViewer = cv;
         setCardViewer(cv);
         messageBorder = new TitledBorder("MODE PAS A PAS");
