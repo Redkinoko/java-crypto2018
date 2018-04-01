@@ -110,15 +110,64 @@ public class Encoder {
         return out;
         
     }
-    
-    public void decodeSeed(String seed)
+
+    public boolean validateSeed(String seed)
     {
+        if(seed.length() != cards.count())
+        {
+            return false;
+        }
         int val = 0;
         for(int i=0 ; i<seed.length() ; i++)
         {
             val = this.charToInt(seed.charAt(i));
-            val = (val>53)?val-1:val;
-            //System.out.println(val);
+            if(val < 1 || val > 54)
+            {
+                return false;
+            }
         }
+        return true;
+    }
+    
+    public void decodeSeed(String seed)
+    {
+        int index = 0;
+        Card[] cards = new Card[seed.length()];
+        
+        int val = 0;
+        for(int i=0 ; i<seed.length() ; i++)
+        {
+            val = this.charToInt(seed.charAt(i));
+            if(val >= 1 && val <= 54 && i<seed.length())
+            {
+                if(val%54 == 0)
+                {
+                    cards[index] = new Card(CardColor.jokerRed, 15);
+                }
+                else if(val%53 == 0)
+                {
+                    cards[index] = new Card(CardColor.jokerBlack, 14);
+                }
+                else if(val/40 == 1)
+                {
+                    cards[index] = new Card(CardColor.spade, (1+(val%40)));
+                }
+                else if(val/27 == 1)
+                {
+                    cards[index] = new Card(CardColor.heart, (1+(val%27)));
+                }
+                else if(val/14 == 1)
+                {
+                    cards[index] = new Card(CardColor.diamond, (1+(val%14)));
+                }
+                else 
+                {
+                    cards[index] = new Card(CardColor.club, val);
+                }
+                index++;
+            }
+        }
+        this.cards.setCards(cards);
+        this.cards.saveCurrentState();
     }
 }

@@ -12,7 +12,14 @@ import java.awt.Color;
  * @author Red
  */
 public class CardColor {
-    
+    //CREATION DES COULEURS
+    public final static CardColor club       = new CardColor("Trèfle",   'c', Color.BLACK).setIcon('♣');
+    public final static CardColor diamond    = new CardColor("Carreau",  'd', Color.RED).setIcon('♦').setValue(13);
+    public final static CardColor heart      = new CardColor("Coeur",    'h', Color.RED).setIcon('♥').setValue(26);
+    public final static CardColor spade      = new CardColor("Pique",    's', Color.BLACK).setIcon('♠').setValue(39);
+    public final static CardColor jokerBlack = new CardColor("Joker",    'j', Color.BLACK).setIcon('☻').setValue(53);
+    public final static CardColor jokerRed   = new CardColor("Joker",    'j', Color.RED).setIcon('☺').setValue(53);
+        
     private String name;
     private char pre;
     private Color color;

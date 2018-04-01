@@ -8,8 +8,22 @@ package view;
 import core.Cards;
 import core.Encoder;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import static java.lang.System.exit;
 import javax.swing.border.TitledBorder;
+import java.awt.AWTException;
+import java.awt.HeadlessException;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -61,6 +75,34 @@ public class App extends javax.swing.JFrame {
         cardViewer.repaint();
     }
     
+    public static void copy(String text)
+    {
+        Clipboard clipboard = getSystemClipboard();
+        clipboard.setContents(new StringSelection(text), null);
+    }
+
+    public static String ClipboardGet() throws Exception
+    {
+        Clipboard systemClipboard = getSystemClipboard();
+        DataFlavor dataFlavor = DataFlavor.stringFlavor;
+
+        if (systemClipboard.isDataFlavorAvailable(dataFlavor))
+        {
+            Object text = systemClipboard.getData(dataFlavor);
+            return (String) text;
+        }
+
+        return null;
+    }
+
+    private static Clipboard getSystemClipboard()
+    {
+        Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
+        Clipboard systemClipboard = defaultToolkit.getSystemClipboard();
+
+        return systemClipboard;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -85,7 +127,9 @@ public class App extends javax.swing.JFrame {
         decryptedText = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        menuShowSeed = new javax.swing.JMenuItem();
+        menuLoadSeed = new javax.swing.JMenuItem();
         menuQuitter = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         menuLoadBackup = new javax.swing.JMenuItem();
@@ -165,8 +209,25 @@ public class App extends javax.swing.JFrame {
 
         jMenu1.setText("Fichier");
 
-        jMenuItem1.setText("Charger");
-        jMenu1.add(jMenuItem1);
+        jMenu4.setText("Seed");
+
+        menuShowSeed.setText("Voir");
+        menuShowSeed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuShowSeedActionPerformed(evt);
+            }
+        });
+        jMenu4.add(menuShowSeed);
+
+        menuLoadSeed.setText("Charger");
+        menuLoadSeed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuLoadSeedActionPerformed(evt);
+            }
+        });
+        jMenu4.add(menuLoadSeed);
+
+        jMenu1.add(jMenu4);
 
         menuQuitter.setText("Quitter");
         menuQuitter.addActionListener(new java.awt.event.ActionListener() {
@@ -302,6 +363,72 @@ public class App extends javax.swing.JFrame {
         this.cardViewer.repaint();
     }//GEN-LAST:event_menuLoadBackupActionPerformed
 
+    private void menuLoadSeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLoadSeedActionPerformed
+        SeedViewer sv = new SeedViewer("Charger une seed", "Coller", "Charger");
+        sv.button1.addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try 
+                {
+                    sv.jText.setText(ClipboardGet());
+                }
+                catch (Exception ex)
+                {
+                    
+                }
+            }
+        });
+        sv.button2.addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String seed = sv.jText.getText();
+                if(seed.equals(""))
+                {
+                    sv.jNoti.setText("La seed ne peut pas être vide!");
+                }
+                else
+                {
+                    if(encoder.validateSeed(seed))
+                    {
+                        encoder.decodeSeed(seed);
+                        repaint();
+                        sv.dispose();
+                    }
+                    else
+                    {
+                        sv.jNoti.setText("La seed est incorrect!");
+                    }
+                    
+                }
+            }
+        });
+        sv.setVisible(true);
+    }//GEN-LAST:event_menuLoadSeedActionPerformed
+
+    private void menuShowSeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuShowSeedActionPerformed
+        String seed = encoder.generateSeed();
+        SeedViewer sv = new SeedViewer("Voir la seed", "Copier", "Ok");
+        sv.jText.setText(seed);
+        sv.button1.addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                copy(seed);
+                sv.jNoti.setText("Copié dans le presse-papier!");
+            }
+        });
+        sv.button2.addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sv.dispose();
+            }
+        });
+        sv.setVisible(true);
+    }//GEN-LAST:event_menuShowSeedActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton decryptButton;
     private javax.swing.JTextField decryptedText;
@@ -310,8 +437,8 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -321,9 +448,11 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelMessages;
     private javax.swing.JMenuItem menuColorMix;
     private javax.swing.JMenuItem menuLoadBackup;
+    private javax.swing.JMenuItem menuLoadSeed;
     private javax.swing.JMenuItem menuNaturalMix;
     private javax.swing.JMenuItem menuQuitter;
     private javax.swing.JMenuItem menuRandomMix;
+    private javax.swing.JMenuItem menuShowSeed;
     private javax.swing.JCheckBoxMenuItem menuSteptoStep;
     private javax.swing.JMenuItem menuValueMix;
     private javax.swing.JTextField textToDecrypt;

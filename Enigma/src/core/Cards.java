@@ -56,6 +56,11 @@ public class Cards {
         backup = null;
     }
     
+    public void setCards(Card[] cards)
+    {
+        this.cards = cards;
+    }
+    
     public void saveCurrentState()
     {
         this.backup = new Cards(this);
