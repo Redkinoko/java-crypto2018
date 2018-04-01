@@ -135,7 +135,7 @@ public class Cards {
     /*
     
     */
-    public void switchCards(int i, int j)
+    private void switchCards(int i, int j)
     {
         if(i >= 0 && i < this.count && j >= 0 && j < this.count)
         {
@@ -148,7 +148,7 @@ public class Cards {
     /*
     
     */
-    public void moveTo(int i, int j)
+    private void moveTo(int i, int j)
     {
         if(i >= 0 && i < this.count && j >= 0 && j < this.count)
         {
@@ -172,7 +172,7 @@ public class Cards {
     /*
     
     */
-    public void pushDown(int i, int j)
+    private void pushDown(int i, int j)
     {
         //si moins de 2 cartes
         if(i >= (this.count-j))
@@ -185,24 +185,8 @@ public class Cards {
         }
     }
     
-    /*
-    Mélange les cartes de façon aléatoire
-    */
-    public void randomMix()
+    private void colorSort()
     {
-        int max = this.count();
-        int min = 0;
-        
-        for(int i=0 ; i<this.count() ; i++)
-        {
-            int rnd = (int)(Math.random()*(max-min) + min);
-            this.switchCards(i, rnd);
-        }
-    }
-    
-    public void colorMix()
-    {
-        randomMix();
         Card[] cs = new Card[max];
         int nb = 0;
         for(int i=0 ; i<this.nbColors ; i++)
@@ -219,9 +203,8 @@ public class Cards {
         cards = cs;
     }
     
-    public void valueMix()
+    private void valueSort()
     {
-        randomMix();
         Card[] cs = new Card[max];
         int nb = 0;
         for(int i=0 ; i<=this.maxCardValue ; i++)
@@ -236,6 +219,76 @@ public class Cards {
             }
         }
         cards = cs;
+    }
+    
+    private void sort()
+    {
+        Card[] cs = new Card[max];
+        int nb = 0, val = 0;
+        for(int i=0 ; i<this.nbColors ; i++)
+        {
+            for(int j=0 ; j<this.count ; j++)
+            {
+                if(cards[j].getColor().equals(this.colors[i]))
+                {
+                    val = cards[j].getValue();
+                    if(val <= 13)
+                    {
+                        nb = (i*13) + val - 1;
+                    }
+                    else if(val == 14)
+                    {
+                        nb = 52;
+                    }
+                    else
+                    {
+                        nb = 53;
+                    }
+                    cs[nb] = cards[j];
+                }
+            }
+        }
+        cards = cs;
+    }
+    /*
+    Mélange les cartes de façon aléatoire
+    */
+    private void randomSort()
+    {
+        int max = this.count();
+        int min = 0;
+        
+        for(int i=0 ; i<this.count() ; i++)
+        {
+            int rnd = (int)(Math.random()*(max-min) + min);
+            this.switchCards(i, rnd);
+        }
+    }
+    
+    public void naturalMix()
+    {
+        sort();
+        saveCurrentState();
+    }
+    
+    public void randomMix()
+    {
+        randomSort();
+        saveCurrentState();
+    }
+    
+    public void colorMix()
+    {
+        randomMix();
+        colorSort();
+        saveCurrentState();
+    }
+    
+    public void valueMix()
+    {
+        randomMix();
+        valueSort();
+        saveCurrentState();
     }
     
     /*
@@ -267,7 +320,7 @@ public class Cards {
     /*
     Méthode qui récupère la position des deux jokers et les utilise pour appeler la fonction de double coupe
     */
-    public void generateJokerCut()
+    private void generateJokerCut()
     {
         int B = this.getBlackJokerIndex();
         int R = this.getRedJokerIndex();
@@ -323,7 +376,7 @@ public class Cards {
     Coupe par rapport à la valeur de la dernière carte.
     On déplace le nombre de cartes désignées, depuis le dessus du paquet, par la valeur de la dernière carte au dessus de cette dernière
     */
-    public void cutFromLast()
+    private void cutFromLast()
     {
         Card[] res = new Card[count];
         int nb = this.get(count-1).getTotalValue();
@@ -373,5 +426,4 @@ public class Cards {
         
         return preKey%26;
     }
-    
 }

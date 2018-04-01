@@ -5,6 +5,8 @@
  */
 package core;
 
+import java.awt.Color;
+
 /**
  *
  * @author Red
@@ -24,7 +26,7 @@ public class Encoder {
         String key = "";
         for(int i=0 ; i<length ; i++)
         {
-            key += intToChar(cards.nextKey());
+            key += intToUpperCaseChar(cards.nextKey());
         }
         
         return key;
@@ -32,10 +34,15 @@ public class Encoder {
     
     public int charToInt(char c)
     {
+        return 1+(int)(c - 'A');
+    }
+    
+    public int upperCaseCharToInt(char c)
+    {
         return 1+(int)(Character.toUpperCase(c) - 'A');
     }
     
-    public char intToChar(int i)
+    public char intToUpperCaseChar(int i)
     {
         return (char)('A'+(i-1));
     }
@@ -52,12 +59,12 @@ public class Encoder {
         int j = 0;
         for(int i=0 ; i<length ; i++)
         {
-            j = charToInt(message.charAt(i)) + charToInt(key.charAt(i));
+            j = upperCaseCharToInt(message.charAt(i)) + upperCaseCharToInt(key.charAt(i));
             if(j > 26)
             {
                 j = j - 26;
             }
-            secret += intToChar(j);
+            secret += intToUpperCaseChar(j);
         }
 
         return secret;
@@ -75,14 +82,42 @@ public class Encoder {
         int j = 0;
         for(int i=0 ; i<length ; i++)
         {
-            j  = charToInt(secret.charAt(i)) - charToInt(key.charAt(i));
+            j  = upperCaseCharToInt(secret.charAt(i)) - upperCaseCharToInt(key.charAt(i));
             if(j < 1)
             {
                 j = j + 26;
             }
-            message += intToChar(j);
+            message += intToUpperCaseChar(j);
         }
 
         return message;
+    }
+    
+    public String generateSeed()
+    {
+        String out = "";
+        int val = 0;
+        for(int i=0 ; i<cards.count() ; i++)
+        {
+            val = cards.get(i).getTotalValue();
+            if(val == 53)
+            {
+                val = (cards.get(i).getColor().getColor().equals(Color.RED))?val+1:val;
+            }
+            out += this.intToUpperCaseChar(val);
+        }
+        return out;
+        
+    }
+    
+    public void decodeSeed(String seed)
+    {
+        int val = 0;
+        for(int i=0 ; i<seed.length() ; i++)
+        {
+            val = this.charToInt(seed.charAt(i));
+            val = (val>53)?val-1:val;
+            //System.out.println(val);
+        }
     }
 }

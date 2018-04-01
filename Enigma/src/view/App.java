@@ -53,6 +53,11 @@ public class App extends javax.swing.JFrame {
         this.setPreferredSize(d2);
     }
     
+    private String cleanString(String in)
+    {
+        return in.replaceAll("[^a-zA-Z]", "").toUpperCase();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -66,6 +71,9 @@ public class App extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
+        textSeed = new javax.swing.JTextField();
+        seedButton = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         encryptButton = new javax.swing.JButton();
         textToEncrypt = new javax.swing.JTextField();
@@ -100,7 +108,21 @@ public class App extends javax.swing.JFrame {
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.EAST);
 
-        jPanel3.setLayout(new java.awt.GridLayout(4, 1, 1, 3));
+        jPanel3.setLayout(new java.awt.GridLayout(5, 1, 1, 1));
+
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Seed"));
+        jPanel9.setLayout(new java.awt.BorderLayout());
+        jPanel9.add(textSeed, java.awt.BorderLayout.CENTER);
+
+        seedButton.setText("voir seed");
+        seedButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seedButtonActionPerformed(evt);
+            }
+        });
+        jPanel9.add(seedButton, java.awt.BorderLayout.EAST);
+
+        jPanel3.add(jPanel9);
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Message à chiffrer"));
         jPanel7.setLayout(new java.awt.BorderLayout());
@@ -156,7 +178,7 @@ public class App extends javax.swing.JFrame {
         getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Mélanger"));
-        jPanel4.setLayout(new java.awt.GridLayout(10, 0, 1, 0));
+        jPanel4.setLayout(new java.awt.GridLayout(5, 1, 5, 1));
 
         mixColors.setText("Couleurs");
         mixColors.addActionListener(new java.awt.event.ActionListener() {
@@ -199,7 +221,8 @@ public class App extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void encryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encryptButtonActionPerformed
-        String tmp = textToEncrypt.getText().toUpperCase();
+        String tmp = cleanString(textToEncrypt.getText());
+        this.textToEncrypt.setText(tmp);
         if(!tmp.equals(""))
         {
             tmp = encoder.encrypt(tmp);
@@ -209,7 +232,8 @@ public class App extends javax.swing.JFrame {
     }//GEN-LAST:event_encryptButtonActionPerformed
 
     private void decryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decryptButtonActionPerformed
-        String tmp = textToDecrypt.getText().toUpperCase();
+        String tmp = cleanString(textToDecrypt.getText());
+        this.textToDecrypt.setText(tmp);
         if(!tmp.equals(""))
         {
             tmp = encoder.decrypt(tmp);
@@ -234,9 +258,16 @@ public class App extends javax.swing.JFrame {
     }//GEN-LAST:event_mixValuesActionPerformed
 
     private void backupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backupActionPerformed
-        this.cards.loadBackup();
+        this.cards.naturalMix();
         this.cardViewer.repaint();
     }//GEN-LAST:event_backupActionPerformed
+
+    private void seedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seedButtonActionPerformed
+        this.cards.loadBackup();
+        String tmp = this.encoder.generateSeed();
+        this.textSeed.setText(tmp);
+        encoder.decodeSeed(tmp);
+    }//GEN-LAST:event_seedButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -289,9 +320,12 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JButton mix;
     private javax.swing.JButton mixColors;
     private javax.swing.JButton mixValues;
+    private javax.swing.JButton seedButton;
+    private javax.swing.JTextField textSeed;
     private javax.swing.JTextField textToDecrypt;
     private javax.swing.JTextField textToEncrypt;
     // End of variables declaration//GEN-END:variables
