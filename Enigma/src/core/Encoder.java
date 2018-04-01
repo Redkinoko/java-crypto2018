@@ -14,6 +14,7 @@ import java.awt.Color;
 public class Encoder {
     
     private Cards cards;
+    private boolean stepToStep;
     
     public Encoder(Cards cards)
     {

@@ -185,7 +185,7 @@ public class Cards {
         }
     }
     
-    private void colorSort()
+    public void colorSort()
     {
         Card[] cs = new Card[max];
         int nb = 0;
@@ -203,7 +203,7 @@ public class Cards {
         cards = cs;
     }
     
-    private void valueSort()
+    public void valueSort()
     {
         Card[] cs = new Card[max];
         int nb = 0;
@@ -221,7 +221,7 @@ public class Cards {
         cards = cs;
     }
     
-    private void sort()
+    public void naturalSort()
     {
         Card[] cs = new Card[max];
         int nb = 0, val = 0;
@@ -253,7 +253,7 @@ public class Cards {
     /*
     Mélange les cartes de façon aléatoire
     */
-    private void randomSort()
+    public void randomSort()
     {
         int max = this.count();
         int min = 0;
@@ -267,7 +267,7 @@ public class Cards {
     
     public void naturalMix()
     {
-        sort();
+        naturalSort();
         saveCurrentState();
     }
     
@@ -394,16 +394,34 @@ public class Cards {
         this.cards = res;
     }
     
-    public void useSteps()
+    public void stepOne()
     {
-        //mix();
         int indJ = getBlackJokerIndex();
         pushDown(indJ, 1);
-        
-        indJ = getRedJokerIndex();
+    }
+    
+    public void stepTwo()
+    {
+        int indJ = getRedJokerIndex();
         pushDown(indJ,2);
+    }
+    
+    public void stepThree()
+    {
         generateJokerCut();
+    }
+    
+    public void stepFour()
+    {
         cutFromLast();
+    }
+    
+    public void useAllSteps()
+    {
+        stepOne();
+        stepTwo();
+        stepThree();
+        stepFour();
     }
     
     /*
@@ -414,7 +432,7 @@ public class Cards {
     */
     public int nextKey()
     {
-        useSteps();
+        useAllSteps();
 
         int first = this.cards[0].getTotalValue();
         

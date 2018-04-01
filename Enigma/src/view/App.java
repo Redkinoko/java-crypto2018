@@ -5,10 +5,16 @@
  */
 package view;
 
+import core.Card;
 import core.Cards;
 import core.Encoder;
-import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Panel;
+import java.awt.Rectangle;
+import static java.lang.System.exit;
+import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
+import javax.swing.border.TitledBorder;
 
 /**
  *
@@ -19,36 +25,31 @@ public class App extends javax.swing.JFrame {
     private Cards cards;
     private Encoder encoder;
     private CardViewer cardViewer;
-    /**
-     * Creates new form App
-     */
-    public App() {
-        initComponents();
-        this.cards      = null;
-        this.encoder    = null;
-        this.cardViewer = null;
-    }
-    
+    private TitledBorder messageBorder;
+
     public App(Cards cards, Encoder encoder, CardViewer cv) {
         initComponents();
         this.cards      = cards;
-        this.encoder    = encoder;
-        this.cardViewer = cv;
+        encoder    = encoder;
+        cardViewer = cv;
         setCardViewer(cv);
+        messageBorder = new TitledBorder("MODE PAS A PAS");
+        messageBorder.setTitleJustification(TitledBorder.CENTER);
+        messageBorder.setTitlePosition(TitledBorder.TOP);
     }
     
     private void setCardViewer(CardViewer cv)
     {
         this.cardViewer = cv;
-        this.jPanel1.add(cv);
+        this.jPanelCenter.add(cv);
         int w = (this.getWidth() + cv.getPreferredSize().width);//171
         int h = (this.getHeight() + cv.getPreferredSize().height);//144
 
         Dimension d = new Dimension(w, h);
-        this.jPanel1.setPreferredSize(d);
-        this.jPanel1.setMinimumSize(d);
+        this.jPanelCenter.setPreferredSize(d);
+        this.jPanelCenter.setMinimumSize(d);
         
-        Dimension d2 = new Dimension(w + this.getMinimumSize().width, h + this.getMinimumSize().height);
+        Dimension d2 = new Dimension(w + this.getMinimumSize().width, h + this.getMinimumSize().height + 15);
         this.setMinimumSize(d2);
         this.setPreferredSize(d2);
     }
@@ -56,6 +57,13 @@ public class App extends javax.swing.JFrame {
     private String cleanString(String in)
     {
         return in.replaceAll("[^a-zA-Z]", "").toUpperCase();
+    }
+    
+    @Override
+    public void repaint()
+    {
+        super.repaint();
+        cardViewer.repaint();
     }
     
     /**
@@ -68,12 +76,8 @@ public class App extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel9 = new javax.swing.JPanel();
-        textSeed = new javax.swing.JTextField();
-        seedButton = new javax.swing.JButton();
+        jPanelCenter = new javax.swing.JPanel();
+        jPanelMessages = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         encryptButton = new javax.swing.JButton();
         textToEncrypt = new javax.swing.JTextField();
@@ -84,45 +88,30 @@ public class App extends javax.swing.JFrame {
         textToDecrypt = new javax.swing.JTextField();
         jPanel8 = new javax.swing.JPanel();
         decryptedText = new javax.swing.JTextField();
-        jPanel4 = new javax.swing.JPanel();
-        mixColors = new javax.swing.JButton();
-        mixValues = new javax.swing.JButton();
-        mix = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        backup = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        menuQuitter = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        menuLoadBackup = new javax.swing.JMenuItem();
+        menuSteptoStep = new javax.swing.JCheckBoxMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        menuNaturalMix = new javax.swing.JMenuItem();
+        menuColorMix = new javax.swing.JMenuItem();
+        menuValueMix = new javax.swing.JMenuItem();
+        menuRandomMix = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1, 1));
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.setMinimumSize(new java.awt.Dimension(1, 1));
-        jPanel1.setPreferredSize(new java.awt.Dimension(1, 1));
         jPanel1.setLayout(new java.awt.BorderLayout());
-        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel2.setMinimumSize(new java.awt.Dimension(1, 1));
+        jPanelCenter.setMinimumSize(new java.awt.Dimension(1, 1));
+        jPanelCenter.setPreferredSize(new java.awt.Dimension(1, 1));
+        jPanelCenter.setLayout(new java.awt.BorderLayout());
+        jPanel1.add(jPanelCenter, java.awt.BorderLayout.CENTER);
 
-        jLabel1.setText("jLabel1");
-        jPanel2.add(jLabel1);
-
-        getContentPane().add(jPanel2, java.awt.BorderLayout.EAST);
-
-        jPanel3.setLayout(new java.awt.GridLayout(5, 1, 1, 1));
-
-        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Seed"));
-        jPanel9.setLayout(new java.awt.BorderLayout());
-        jPanel9.add(textSeed, java.awt.BorderLayout.CENTER);
-
-        seedButton.setText("voir seed");
-        seedButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                seedButtonActionPerformed(evt);
-            }
-        });
-        jPanel9.add(seedButton, java.awt.BorderLayout.EAST);
-
-        jPanel3.add(jPanel9);
+        jPanelMessages.setLayout(new java.awt.GridLayout(4, 1, 1, 1));
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Message à chiffrer"));
         jPanel7.setLayout(new java.awt.BorderLayout());
@@ -142,7 +131,7 @@ public class App extends javax.swing.JFrame {
         textToEncrypt.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel7.add(textToEncrypt, java.awt.BorderLayout.CENTER);
 
-        jPanel3.add(jPanel7);
+        jPanelMessages.add(jPanel7);
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Message chiffré"));
         jPanel6.setLayout(new java.awt.BorderLayout());
@@ -150,7 +139,7 @@ public class App extends javax.swing.JFrame {
         encryptedText.setEditable(false);
         jPanel6.add(encryptedText, java.awt.BorderLayout.CENTER);
 
-        jPanel3.add(jPanel6);
+        jPanelMessages.add(jPanel6);
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Message à déchiffrer"));
         jPanel5.setLayout(new java.awt.BorderLayout());
@@ -165,7 +154,7 @@ public class App extends javax.swing.JFrame {
         jPanel5.add(decryptButton, java.awt.BorderLayout.LINE_END);
         jPanel5.add(textToDecrypt, java.awt.BorderLayout.CENTER);
 
-        jPanel3.add(jPanel5);
+        jPanelMessages.add(jPanel5);
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Message déchiffré"));
         jPanel8.setLayout(new java.awt.BorderLayout());
@@ -173,49 +162,84 @@ public class App extends javax.swing.JFrame {
         decryptedText.setEditable(false);
         jPanel8.add(decryptedText, java.awt.BorderLayout.CENTER);
 
-        jPanel3.add(jPanel8);
+        jPanelMessages.add(jPanel8);
 
-        getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
+        jPanel1.add(jPanelMessages, java.awt.BorderLayout.SOUTH);
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Mélanger"));
-        jPanel4.setLayout(new java.awt.GridLayout(5, 1, 5, 1));
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        mixColors.setText("Couleurs");
-        mixColors.addActionListener(new java.awt.event.ActionListener() {
+        jMenu1.setText("Fichier");
+
+        jMenuItem1.setText("Charger");
+        jMenu1.add(jMenuItem1);
+
+        menuQuitter.setText("Quitter");
+        menuQuitter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mixColorsActionPerformed(evt);
+                menuQuitterActionPerformed(evt);
             }
         });
-        jPanel4.add(mixColors);
+        jMenu1.add(menuQuitter);
 
-        mixValues.setText("Valeurs");
-        mixValues.addActionListener(new java.awt.event.ActionListener() {
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Etapes");
+
+        menuLoadBackup.setText("Paquet initial");
+        menuLoadBackup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mixValuesActionPerformed(evt);
+                menuLoadBackupActionPerformed(evt);
             }
         });
-        jPanel4.add(mixValues);
+        jMenu2.add(menuLoadBackup);
 
-        mix.setText("Aléatoire");
-        mix.addActionListener(new java.awt.event.ActionListener() {
+        menuSteptoStep.setText("Pas à pas");
+        menuSteptoStep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mixActionPerformed(evt);
+                menuSteptoStepActionPerformed(evt);
             }
         });
-        jPanel4.add(mix);
+        jMenu2.add(menuSteptoStep);
 
-        jLabel5.setText(" ");
-        jPanel4.add(jLabel5);
+        jMenuBar1.add(jMenu2);
 
-        backup.setText("Défaut");
-        backup.addActionListener(new java.awt.event.ActionListener() {
+        jMenu3.setText("Mélanger");
+
+        menuNaturalMix.setText("Naturel");
+        menuNaturalMix.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backupActionPerformed(evt);
+                menuNaturalMixActionPerformed(evt);
             }
         });
-        jPanel4.add(backup);
+        jMenu3.add(menuNaturalMix);
 
-        getContentPane().add(jPanel4, java.awt.BorderLayout.WEST);
+        menuColorMix.setText("Couleur");
+        menuColorMix.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuColorMixActionPerformed(evt);
+            }
+        });
+        jMenu3.add(menuColorMix);
+
+        menuValueMix.setText("Valeur");
+        menuValueMix.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuValueMixActionPerformed(evt);
+            }
+        });
+        jMenu3.add(menuValueMix);
+
+        menuRandomMix.setText("Aléatoire");
+        menuRandomMix.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRandomMixActionPerformed(evt);
+            }
+        });
+        jMenu3.add(menuRandomMix);
+
+        jMenuBar1.add(jMenu3);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -242,90 +266,71 @@ public class App extends javax.swing.JFrame {
         this.cardViewer.repaint();
     }//GEN-LAST:event_decryptButtonActionPerformed
 
-    private void mixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mixActionPerformed
-        this.cards.randomMix();
-        this.cardViewer.repaint();
-    }//GEN-LAST:event_mixActionPerformed
-
-    private void mixColorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mixColorsActionPerformed
+    private void menuColorMixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuColorMixActionPerformed
         this.cards.colorMix();
         this.cardViewer.repaint();
-    }//GEN-LAST:event_mixColorsActionPerformed
+    }//GEN-LAST:event_menuColorMixActionPerformed
 
-    private void mixValuesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mixValuesActionPerformed
+    private void menuValueMixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuValueMixActionPerformed
         this.cards.valueMix();
         this.cardViewer.repaint();
-    }//GEN-LAST:event_mixValuesActionPerformed
+    }//GEN-LAST:event_menuValueMixActionPerformed
 
-    private void backupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backupActionPerformed
+    private void menuRandomMixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRandomMixActionPerformed
+        this.cards.randomMix();
+        this.cardViewer.repaint();
+    }//GEN-LAST:event_menuRandomMixActionPerformed
+
+    private void menuNaturalMixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNaturalMixActionPerformed
         this.cards.naturalMix();
         this.cardViewer.repaint();
-    }//GEN-LAST:event_backupActionPerformed
+    }//GEN-LAST:event_menuNaturalMixActionPerformed
 
-    private void seedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seedButtonActionPerformed
-        this.cards.loadBackup();
-        String tmp = this.encoder.generateSeed();
-        this.textSeed.setText(tmp);
-        encoder.decodeSeed(tmp);
-    }//GEN-LAST:event_seedButtonActionPerformed
+    private void menuQuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuQuitterActionPerformed
+        exit(0);
+    }//GEN-LAST:event_menuQuitterActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(App.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(App.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(App.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(App.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    private void menuSteptoStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSteptoStepActionPerformed
+        if(this.menuSteptoStep.isSelected())
+        {
+            this.jPanel1.setBorder(messageBorder);
         }
-        //</editor-fold>
+        else
+        {
+            this.jPanel1.setBorder(null);
+        }
+        repaint();
+    }//GEN-LAST:event_menuSteptoStepActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new App().setVisible(true);
-            }
-        });
-    }
+    private void menuLoadBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLoadBackupActionPerformed
+        this.cards.loadBackup();
+        this.cardViewer.repaint();
+    }//GEN-LAST:event_menuLoadBackupActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton backup;
     private javax.swing.JButton decryptButton;
     private javax.swing.JTextField decryptedText;
     private javax.swing.JButton encryptButton;
     private javax.swing.JTextField encryptedText;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
-    private javax.swing.JButton mix;
-    private javax.swing.JButton mixColors;
-    private javax.swing.JButton mixValues;
-    private javax.swing.JButton seedButton;
-    private javax.swing.JTextField textSeed;
+    private javax.swing.JPanel jPanelCenter;
+    private javax.swing.JPanel jPanelMessages;
+    private javax.swing.JMenuItem menuColorMix;
+    private javax.swing.JMenuItem menuLoadBackup;
+    private javax.swing.JMenuItem menuNaturalMix;
+    private javax.swing.JMenuItem menuQuitter;
+    private javax.swing.JMenuItem menuRandomMix;
+    private javax.swing.JCheckBoxMenuItem menuSteptoStep;
+    private javax.swing.JMenuItem menuValueMix;
     private javax.swing.JTextField textToDecrypt;
     private javax.swing.JTextField textToEncrypt;
     // End of variables declaration//GEN-END:variables

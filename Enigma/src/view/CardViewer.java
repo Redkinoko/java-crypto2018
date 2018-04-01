@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import javax.swing.border.TitledBorder;
 
 /**
  *
@@ -19,7 +20,8 @@ import java.awt.Point;
 public class CardViewer extends javax.swing.JPanel {
 
     private Cards cards;
-
+    private TitledBorder borderNbPages;
+    
     private int rows;
     private int cols;
     private int index;
@@ -58,6 +60,7 @@ public class CardViewer extends javax.swing.JPanel {
         int w = (marginLeft + Card.WIDTH + marginRight)*6;
         int h = marginTop+126+marginBottom;
         this.jPanelCenter.setPreferredSize(new Dimension(w, h));
+        this.jPanelCenter.setMinimumSize(new Dimension(w, h));
         coords = new Point[cards.count()];
         for(int i=0 ; i<cards.count() ; i++)
         {
@@ -67,6 +70,10 @@ public class CardViewer extends javax.swing.JPanel {
         mouseSelectX    = 0;
         mouseSelectY    = 0;
         cardSelected    = -1;
+        
+        borderNbPages = new TitledBorder("");
+        borderNbPages.setTitleJustification(TitledBorder.CENTER);
+        borderNbPages.setTitlePosition(TitledBorder.TOP);
     }
     
     @Override
@@ -119,8 +126,8 @@ public class CardViewer extends javax.swing.JPanel {
             }
         }
         //Cacher les boutons de changement de page si toutes les cartes sont affichées
-        showPanels();
         drawNbPageIndicator();
+        showPanels();
     }
     
     public void drawCard(Graphics g, int k, int x, int y)
@@ -174,7 +181,10 @@ public class CardViewer extends javax.swing.JPanel {
     {
         if(this.cols > 0 && this.rows > 0)
         {
-            this.jLabel1.setText("page: " + (1+(this.index/this.rows)) + "/" + (this.cards.count()/this.rows));
+            int nbPages   = 1+(this.index/this.rows);
+            int maxPages  = 1+(this.cards.count()/this.rows);
+            
+            this.borderNbPages.setTitle("page: " + nbPages + "/" + maxPages);
         }
     }
     
@@ -183,7 +193,14 @@ public class CardViewer extends javax.swing.JPanel {
         boolean b = !((this.cols * this.rows) >= this.cards.count());
         this.jPanelWest.setVisible(b);            
         this.jPanelEast.setVisible(b);
-        this.jPanelSouth.setVisible(b);
+        if(b)
+        {
+            this.setBorder(borderNbPages);
+        }
+        else
+        {
+            this.setBorder(null);
+        }
     }
     
     /**
@@ -200,8 +217,6 @@ public class CardViewer extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jPanelEast = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
-        jPanelSouth = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -218,6 +233,7 @@ public class CardViewer extends javax.swing.JPanel {
                 jPanelCenterMouseClicked(evt);
             }
         });
+        jPanelCenter.setLayout(new java.awt.BorderLayout());
         add(jPanelCenter, java.awt.BorderLayout.CENTER);
 
         jPanelWest.setLayout(new java.awt.CardLayout());
@@ -243,11 +259,6 @@ public class CardViewer extends javax.swing.JPanel {
         jPanelEast.add(jButton2, "card2");
 
         add(jPanelEast, java.awt.BorderLayout.EAST);
-
-        jLabel1.setText("jLabel1");
-        jPanelSouth.add(jLabel1);
-
-        add(jPanelSouth, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
@@ -319,10 +330,8 @@ public class CardViewer extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanelCenter;
     private javax.swing.JPanel jPanelEast;
-    private javax.swing.JPanel jPanelSouth;
     private javax.swing.JPanel jPanelWest;
     // End of variables declaration//GEN-END:variables
 }
