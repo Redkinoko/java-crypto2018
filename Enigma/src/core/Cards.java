@@ -448,7 +448,7 @@ public class Cards {
             return nextKey();
         }
         
-        return preKey%27;
+        return 1+(preKey%27);
     }
     
     public int preKey()
@@ -465,7 +465,8 @@ public class Cards {
     
     public int manualKey(int pre)
     {
-        return pre%27;
+        //System.out.println(1+(pre%27));
+        return 1+(pre%27);
     }
     
 }
