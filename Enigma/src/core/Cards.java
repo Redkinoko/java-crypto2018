@@ -448,7 +448,7 @@ public class Cards {
             return nextKey();
         }
         
-        return preKey%26;
+        return preKey%27;
     }
     
     public int preKey()
@@ -465,7 +465,7 @@ public class Cards {
     
     public int manualKey(int pre)
     {
-        return pre%26;
+        return pre%27;
     }
     
 }
