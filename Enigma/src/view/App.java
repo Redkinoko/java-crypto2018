@@ -41,8 +41,8 @@ public class App extends javax.swing.JFrame {
         messageBorder.setTitleJustification(TitledBorder.CENTER);
         messageBorder.setTitlePosition(TitledBorder.TOP);
         jPanelSteps.setVisible(false);
-        currentChar = 0;
-        currentStep = 0;
+        currentChar = -1;
+        currentStep = -1;
     }
     
     private void setCardViewer(CardViewer cv)
@@ -72,12 +72,6 @@ public class App extends javax.swing.JFrame {
         super.paint(g);
         int max = encoder.getSteps().size();
         this.menuStepByStep.setEnabled(max > 0);
-        
-        int possi  = encoder.getMsgLength() * 4;
-        int fails  = (encoder.getTotalNbSteps()-possi)/4;
-        this.jLabelTotal.setText("Total: " + max + " (dont " + fails + " recalculs)");
-        this.jLabelNChar.setText("Caractère n°" + (1+currentChar) + "/" + encoder.getMsgLength());
-        this.jLabelNStep.setText("Etape n°" + (1+currentStep) + "/" + encoder.getNbSteps(currentChar));
     }
     
     public static void copy(String text)
@@ -110,10 +104,30 @@ public class App extends javax.swing.JFrame {
     
     public void updateSteps()
     {
-        if(this.menuStepByStep.isEnabled())
+        if(this.menuStepByStep.isSelected())
         {
-            String seed = encoder.getSeed(currentChar, currentStep);
-            encoder.decodeSeed(seed);
+            if(currentChar > -1 && currentStep > -1)
+            {
+                String seed = encoder.getSeed(currentChar, currentStep);
+                encoder.decodeSeed(seed);
+                char a = this.textToEncrypt.getText().charAt(currentChar);
+                char z = this.encryptedText.getText().charAt(currentChar);
+
+                this.jLabelChar.setText(a + " -> " + z);
+                this.jLabelNChar.setText("Caractère n°" + (1+currentChar) + "/" + encoder.getMsgLength());
+                this.jLabelNStep.setText("Etape n°" + (1+currentStep) + "/" + encoder.getNbSteps(currentChar));
+            }
+            else
+            {
+                cards.loadBackup();
+                this.jLabelChar.setText("");
+                this.jLabelNChar.setText("Caractère n°" + (1+currentChar) + "/" + encoder.getMsgLength());
+                this.jLabelNStep.setText("Etape n°" + (1+currentStep) + "/" + 1);
+            }
+            int possi  = encoder.getMsgLength() * 4;
+            int fails  = (encoder.getTotalNbSteps()-possi)/4;
+            int max = encoder.getSteps().size();
+            this.jLabelTotal.setText("Total: " + max + " (dont " + fails + " recalculs)");
         }
     }
     
@@ -141,6 +155,7 @@ public class App extends javax.swing.JFrame {
         decryptedText = new javax.swing.JTextField();
         jPanelSteps = new javax.swing.JPanel();
         jLabelTotal = new javax.swing.JLabel();
+        jLabelChar = new javax.swing.JLabel();
         jLabelNChar = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jButCharPrev = new javax.swing.JButton();
@@ -229,10 +244,13 @@ public class App extends javax.swing.JFrame {
 
         jPanel1.add(jPanelMessages, java.awt.BorderLayout.SOUTH);
 
-        jPanelSteps.setLayout(new java.awt.GridLayout(5, 1, 1, 1));
+        jPanelSteps.setLayout(new java.awt.GridLayout(6, 1, 1, 1));
 
         jLabelTotal.setText("Total :");
         jPanelSteps.add(jLabelTotal);
+
+        jLabelChar.setText("a -> z");
+        jPanelSteps.add(jLabelChar);
 
         jLabelNChar.setText("Caractère n°");
         jPanelSteps.add(jLabelNChar);
@@ -380,8 +398,8 @@ public class App extends javax.swing.JFrame {
     private void encryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encryptButtonActionPerformed
         String tmp = cleanString(textToEncrypt.getText());
         this.textToEncrypt.setText(tmp);
-        this.currentChar = 0;
-        this.currentStep = 0;
+        this.currentChar = -1;
+        this.currentStep = -1;
         if(!tmp.equals(""))
         {
             tmp = encoder.encrypt(tmp);
@@ -394,8 +412,8 @@ public class App extends javax.swing.JFrame {
     private void decryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decryptButtonActionPerformed
         String tmp = cleanString(textToDecrypt.getText());
         this.textToDecrypt.setText(tmp);
-        this.currentChar = 0;
-        this.currentStep = 0;
+        this.currentChar = -1;
+        this.currentStep = -1;
         if(!tmp.equals(""))
         {
             tmp = encoder.decrypt(tmp);
@@ -434,18 +452,23 @@ public class App extends javax.swing.JFrame {
         {
             this.jPanel1.setBorder(messageBorder);
             this.jPanelSteps.setVisible(true);
+            this.cardViewer.setUseSelect(false);
             updateSteps();
         }
         else
         {
             this.jPanel1.setBorder(null);
             this.jPanelSteps.setVisible(false);
+            this.cardViewer.setUseSelect(true);
         }
         repaint();
     }//GEN-LAST:event_menuStepByStepActionPerformed
 
     private void menuLoadBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLoadBackupActionPerformed
         this.cards.loadBackup();
+        this.currentChar = -1;
+        this.currentStep = -1;
+        this.updateSteps();
         repaint();
     }//GEN-LAST:event_menuLoadBackupActionPerformed
 
@@ -533,6 +556,12 @@ public class App extends javax.swing.JFrame {
             currentChar--;
             updateSteps();
         }
+        else if(currentChar == 0)
+        {
+            currentStep = -1;
+            currentChar = -1;
+            updateSteps();
+        }
         repaint();
     }//GEN-LAST:event_jButCharPrevActionPerformed
 
@@ -542,6 +571,18 @@ public class App extends javax.swing.JFrame {
             currentStep++;
             updateSteps();
         }
+        else if(currentStep == -1 && currentChar == -1)
+        {
+            currentStep = 0;
+            currentChar = 0;
+            updateSteps();
+        }
+        else if(currentStep == (encoder.getNbSteps(currentChar)-1) && currentChar < (encoder.getMsgLength()-1))
+        {
+            currentChar++;
+            currentStep = 0;
+            updateSteps();
+        }
         repaint();
     }//GEN-LAST:event_jButStepNextActionPerformed
 
@@ -549,6 +590,18 @@ public class App extends javax.swing.JFrame {
         if(currentStep > 0)
         {
             currentStep--;
+            updateSteps();
+        }
+        else if(currentChar == 0 && currentStep == 0)
+        {
+            currentStep = -1;
+            currentChar = -1;
+            updateSteps();
+        }
+        else if(currentStep == 0 && currentChar > 0)
+        {
+            currentChar--;
+            currentStep = encoder.getNbSteps(currentChar) - 1;
             updateSteps();
         }
         repaint();
@@ -563,6 +616,7 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JButton jButCharPrev;
     private javax.swing.JButton jButStepNext;
     private javax.swing.JButton jButStepPrev;
+    private javax.swing.JLabel jLabelChar;
     private javax.swing.JLabel jLabelNChar;
     private javax.swing.JLabel jLabelNStep;
     private javax.swing.JLabel jLabelTotal;

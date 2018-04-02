@@ -40,7 +40,7 @@ public class Encoder {
     
     public int getNbSteps(int n)
     {
-        return (nbSteps.size() > 0)?nbSteps.get(n):0;
+        return (nbSteps.size() > 0 && n >= 0)?nbSteps.get(n):0;
     }
     
     public String getSeed(int c, int n)
@@ -113,8 +113,8 @@ public class Encoder {
     public String generateKey(int length)
     {
         msgLength   = length;
-        steps.clear();
         nbSteps.clear();
+        steps.clear();
         cards.loadBackup();
         String key = "";
         for(int i=0 ; i<length ; i++)

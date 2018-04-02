@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import javax.swing.JOptionPane;
 import javax.swing.border.TitledBorder;
 
 /**
@@ -37,6 +38,7 @@ public class CardViewer extends javax.swing.JPanel {
     private int nbPage;
     private int maxPage;
     
+    private boolean useSelect;
     private boolean mouseSelect;
     private int mouseSelectX;
     private int mouseSelectY;
@@ -76,6 +78,7 @@ public class CardViewer extends javax.swing.JPanel {
         borderNbPages = new TitledBorder("");
         borderNbPages.setTitleJustification(TitledBorder.CENTER);
         borderNbPages.setTitlePosition(TitledBorder.TOP);
+        useSelect = true;
     }
     
     @Override
@@ -132,6 +135,11 @@ public class CardViewer extends javax.swing.JPanel {
         drawNbPageIndicator();
         showPanels();
         setEnabledButtons();
+    }
+    
+    public void setUseSelect(boolean select)
+    {
+        this.useSelect = select;
     }
     
     public void drawCard(Graphics g, int k, int x, int y)
@@ -308,39 +316,46 @@ public class CardViewer extends javax.swing.JPanel {
     }//GEN-LAST:event_jButPrevActionPerformed
 
     private void jPanelCenterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelCenterMouseClicked
-        int x = 0;
-        int y = 0;
-        int i = index;
-        mouseSelectX = evt.getX() + this.originX;
-        mouseSelectY = evt.getY() + this.originY;
-        mouseSelect = true;
-
-        while(mouseSelect && i<cards.count())
+        if(useSelect)
         {
-            x = coords[i].x;
-            y = coords[i].y;
-            if(mouseSelectX >= x && mouseSelectX <= (x+Card.WIDTH) &&
-               mouseSelectY >= y && mouseSelectY <=(y+Card.HEIGHT))
+            int x = 0;
+            int y = 0;
+            int i = index;
+            mouseSelectX = evt.getX() + this.originX;
+            mouseSelectY = evt.getY() + this.originY;
+            mouseSelect = true;
+
+            while(mouseSelect && i<cards.count())
             {
-                if(cardSelected == i)
+                x = coords[i].x;
+                y = coords[i].y;
+                if(mouseSelectX >= x && mouseSelectX <= (x+Card.WIDTH) &&
+                   mouseSelectY >= y && mouseSelectY <=(y+Card.HEIGHT))
                 {
-                    cardSelected = -1;
+                    if(cardSelected == i)
+                    {
+                        cardSelected = -1;
+                    }
+                    else if(cardSelected > -1)
+                    {
+                        cards.switchCards(cardSelected, i);
+                        cardSelected = -1;
+                        cards.saveCurrentState();
+                    }
+                    else
+                    {
+                        cardSelected = i;
+                    }
+                    mouseSelect = false;
                 }
-                else if(cardSelected > -1)
-                {
-                    cards.switchCards(cardSelected, i);
-                    cardSelected = -1;
-                    cards.saveCurrentState();
-                }
-                else
-                {
-                    cardSelected = i;
-                }
-                mouseSelect = false;
+                i++;
             }
-            i++;
+            repaint();
         }
-        repaint();
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Pour déplacer manuellement les cartes, merci de désactiver le mode pas à pas", "Erreur sélection", JOptionPane.PLAIN_MESSAGE);
+        }
     }//GEN-LAST:event_jPanelCenterMouseClicked
 
 
