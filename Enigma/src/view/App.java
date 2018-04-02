@@ -120,7 +120,7 @@ public class App extends javax.swing.JFrame {
             else
             {
                 cards.loadBackup();
-                this.jLabelChar.setText("");
+                this.jLabelChar.setText("Etat initial");
                 this.jLabelNChar.setText("Caractère n°" + (1+currentChar) + "/" + encoder.getMsgLength());
                 this.jLabelNStep.setText("Etape n°" + (1+currentStep) + "/" + 1);
             }
