@@ -473,6 +473,11 @@ public class App extends javax.swing.JFrame {
     }//GEN-LAST:event_menuLoadBackupActionPerformed
 
     private void menuLoadSeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLoadSeedActionPerformed
+        this.menuStepByStep.setSelected(false);
+        this.jPanelSteps.setVisible(false);
+        this.currentChar = -1;
+        this.currentStep = -1;
+        this.updateSteps();
         SeedViewer sv = new SeedViewer("Charger une seed", "Coller", "Charger");
         sv.getButton1().addActionListener(new ActionListener() 
         {
@@ -518,6 +523,9 @@ public class App extends javax.swing.JFrame {
     }//GEN-LAST:event_menuLoadSeedActionPerformed
 
     private void menuShowSeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuShowSeedActionPerformed
+        this.currentChar = -1;
+        this.currentStep = -1;
+        this.updateSteps();
         String seed = encoder.generateSeed();
         SeedViewer sv = new SeedViewer("Voir la seed", "Copier", "Ok");
         sv.getjText().setText(seed);
