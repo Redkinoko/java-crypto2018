@@ -432,6 +432,11 @@ public class Cards {
         stepFour();
     }
     
+    public int remove26(int i)
+    {
+        return (i>26)?(remove26(i-26)):(i);
+    }
+    
     /*
     Fonction retournant une valeur de clef pour le chiffrement
     Utilise la valeur de la première carte pour aller chercher une autre carte
@@ -448,7 +453,7 @@ public class Cards {
             return nextKey();
         }
         
-        return 1+(preKey%27);
+        return remove26(preKey);
     }
     
     public int preKey()
@@ -465,8 +470,7 @@ public class Cards {
     
     public int manualKey(int pre)
     {
-        //System.out.println(1+(pre%27));
-        return 1+(pre%27);
+        return remove26(pre);
     }
     
 }

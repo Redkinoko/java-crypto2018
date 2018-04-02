@@ -38,6 +38,8 @@ public class Main {
         App app = new App(cards, encoder, cw);
         app.setTitle("java-crypto2018 - M1 - 2017/2018 - Projet Cryptographie et jeu de cartes");
         app.setVisible(true);
+        
+        Test.justDoIt();
     }
 
     
