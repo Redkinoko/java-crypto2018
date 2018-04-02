@@ -110,8 +110,11 @@ public class App extends javax.swing.JFrame {
     
     public void updateSteps()
     {
-        String seed = encoder.getSeed(currentChar, currentStep);
-        encoder.decodeSeed(seed);
+        if(this.menuStepByStep.isEnabled())
+        {
+            String seed = encoder.getSeed(currentChar, currentStep);
+            encoder.decodeSeed(seed);
+        }
     }
     
     /**
@@ -383,6 +386,7 @@ public class App extends javax.swing.JFrame {
         {
             tmp = encoder.encrypt(tmp);
             this.encryptedText.setText(tmp);
+            this.updateSteps();
         }
         repaint();
     }//GEN-LAST:event_encryptButtonActionPerformed
@@ -396,6 +400,7 @@ public class App extends javax.swing.JFrame {
         {
             tmp = encoder.decrypt(tmp);
             this.decryptedText.setText(tmp);
+            this.updateSteps();
         }
         repaint();
     }//GEN-LAST:event_decryptButtonActionPerformed
