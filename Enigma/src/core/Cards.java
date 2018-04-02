@@ -435,7 +435,7 @@ public class Cards {
     /*
     Fonction retournant une valeur de clef pour le chiffrement
     Utilise la valeur de la première carte pour aller chercher une autre carte
-    dans le paquet dont la valeur modulo 26 sera le caractère utilisé.
+    dans le paquet dont la valeur modulo 27 sera le caractère utilisé.
     Rencontrer un Joker relance les opérations précédentes sans donner de valeur
     */
     public int nextKey()
@@ -448,7 +448,7 @@ public class Cards {
             return nextKey();
         }
         
-        return preKey%26;
+        return preKey%27;
     }
     
     public int preKey()
@@ -465,7 +465,7 @@ public class Cards {
     
     public int manualKey(int pre)
     {
-        return pre%26;
+        return pre%27;
     }
     
 }
