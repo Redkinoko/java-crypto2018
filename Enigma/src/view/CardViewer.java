@@ -34,6 +34,8 @@ public class CardViewer extends javax.swing.JPanel {
     private int maxX;
     private int maxY;
     private Point[] coords;
+    private int nbPage;
+    private int maxPage;
     
     private boolean mouseSelect;
     private int mouseSelectX;
@@ -126,8 +128,10 @@ public class CardViewer extends javax.swing.JPanel {
             }
         }
         //Cacher les boutons de changement de page si toutes les cartes sont affichées
+        fixWrongPage();
         drawNbPageIndicator();
         showPanels();
+        setEnabledButtons();
     }
     
     public void drawCard(Graphics g, int k, int x, int y)
@@ -179,12 +183,16 @@ public class CardViewer extends javax.swing.JPanel {
     
     public void drawNbPageIndicator()
     {
+        this.setBorder(null);
         if(this.cols > 0 && this.rows > 0)
         {
-            int nbPages   = 1+(this.index/this.rows);
-            int maxPages  = 1+(this.cards.count()/this.rows);
+            maxPage = this.cards.count()/this.rows;
+            int tmp = (this.cards.count()%this.rows>0)?1+maxPage:maxPage;
+            nbPage  = this.index/this.rows;
+            String text = "page: " + (1+nbPage) + "/" + tmp;
             
-            this.borderNbPages.setTitle("page: " + nbPages + "/" + maxPages);
+            this.borderNbPages.setTitle(text);
+            this.setBorder(borderNbPages);
         }
     }
     
@@ -193,14 +201,28 @@ public class CardViewer extends javax.swing.JPanel {
         boolean b = !((this.cols * this.rows) >= this.cards.count());
         this.jPanelWest.setVisible(b);            
         this.jPanelEast.setVisible(b);
-        if(b)
-        {
-            this.setBorder(borderNbPages);
-        }
-        else
+        if(!b)
         {
             this.setBorder(null);
         }
+    }
+    
+    public void fixWrongPage()
+    {
+        if(nbPage > maxPage)
+        {
+            this.index = maxPage*rows;
+        }
+        if(index%rows > 0)
+        {
+            this.index = (nbPage*rows);
+        }
+    }
+    
+    public void setEnabledButtons()
+    {
+        this.jButNext.setEnabled((nbPage+1) <= maxPage);
+        this.jButPrev.setEnabled((nbPage-1) >= 0);
     }
     
     /**
@@ -214,9 +236,9 @@ public class CardViewer extends javax.swing.JPanel {
 
         jPanelCenter = new javax.swing.JPanel();
         jPanelWest = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        jButPrev = new javax.swing.JButton();
         jPanelEast = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        jButNext = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -238,25 +260,25 @@ public class CardViewer extends javax.swing.JPanel {
 
         jPanelWest.setLayout(new java.awt.CardLayout());
 
-        jButton1.setText("<");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButPrev.setText("<");
+        jButPrev.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButPrevActionPerformed(evt);
             }
         });
-        jPanelWest.add(jButton1, "card2");
+        jPanelWest.add(jButPrev, "card2");
 
         add(jPanelWest, java.awt.BorderLayout.WEST);
 
         jPanelEast.setLayout(new java.awt.CardLayout());
 
-        jButton2.setText(">");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButNext.setText(">");
+        jButNext.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButNextActionPerformed(evt);
             }
         });
-        jPanelEast.add(jButton2, "card2");
+        jPanelEast.add(jButNext, "card2");
 
         add(jPanelEast, java.awt.BorderLayout.EAST);
     }// </editor-fold>//GEN-END:initComponents
@@ -265,30 +287,25 @@ public class CardViewer extends javax.swing.JPanel {
         //System.out.println(this.jPanel1.getWidth() + " " + this.jPanel1.getHeight());
     }//GEN-LAST:event_formComponentResized
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if(this.index < (this.cards.count()-this.rows))
+    private void jButNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButNextActionPerformed
+        int next = (nbPage+1)*rows;
+        if(next < cards.count())
         {
-            this.index += this.rows;
+            this.index = next;
         }
-        else if(this.index < (this.cards.count()-1))
-        {
-            this.index += 1;
-        }
-        this.repaint();
-    }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(this.index >= this.rows)
-        {
-            this.index -= this.rows;
-        }
-        else if(this.index > 0)
-        {
-            this.index -= 1;
-        }
-        
         this.repaint();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButNextActionPerformed
+
+    private void jButPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButPrevActionPerformed
+        int prev = (nbPage-1)*rows;
+        if(prev >= 0)
+        {
+            this.index = prev;
+        }
+
+        this.repaint();
+    }//GEN-LAST:event_jButPrevActionPerformed
 
     private void jPanelCenterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanelCenterMouseClicked
         int x = 0;
@@ -328,8 +345,8 @@ public class CardViewer extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButNext;
+    private javax.swing.JButton jButPrev;
     private javax.swing.JPanel jPanelCenter;
     private javax.swing.JPanel jPanelEast;
     private javax.swing.JPanel jPanelWest;
