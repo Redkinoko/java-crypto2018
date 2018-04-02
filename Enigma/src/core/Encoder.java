@@ -45,7 +45,13 @@ public class Encoder {
     
     public String getSeed(int c, int n)
     {
-        int i = n + (c*getNbSteps(c));
+        int ec = 0;
+        for(int j=0 ; j<c ; j++)
+        {
+            ec += getNbSteps(j);
+        }
+        int i = n + (ec);
+        //System.out.println(i);
         return steps.get(i).getSeed();
     }
     
