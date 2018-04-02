@@ -110,6 +110,13 @@ public class App extends javax.swing.JFrame {
             {
                 String seed = encoder.getSeed(currentChar, currentStep);
                 encoder.decodeSeed(seed);
+                
+                if(this.textToEncrypt.getText().equals(""))
+                {
+                    this.textToEncrypt.setText(this.decryptedText.getText());
+                    this.encryptedText.setText(this.textToDecrypt.getText());
+                }
+                
                 char a = this.textToEncrypt.getText().charAt(currentChar);
                 char z = this.encryptedText.getText().charAt(currentChar);
 
