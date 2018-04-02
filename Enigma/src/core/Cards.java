@@ -12,7 +12,7 @@ import java.awt.Color;
  * @author Red
  */
 public class Cards {
-    
+
     private int count;
     private int max;
     private int nbColors;
@@ -20,6 +20,7 @@ public class Cards {
     private CardColor[] colors;
     private Card[] cards;
     private Cards backup;
+    
     
     public Cards()
     {
@@ -45,15 +46,16 @@ public class Cards {
     
     public Cards(Cards c)
     {
-        max    = c.max;
-        count  = c.count;
-        cards  = new Card[max];
-        nbColors = c.nbColors;
-        colors   = new CardColor[max];
-        maxCardValue = c.maxCardValue;
+        max             = c.max;
+        count           = c.count;
+        cards           = new Card[max];
+        nbColors        = c.nbColors;
+        colors          = new CardColor[max];
+        maxCardValue    = c.maxCardValue;
+        backup          = null;
+        
         System.arraycopy(c.cards, 0, cards, 0, c.cards.length);
         System.arraycopy(c.colors, 0, colors, 0, c.colors.length);
-        backup = null;
     }
     
     public void setCards(Card[] cards)
@@ -70,12 +72,13 @@ public class Cards {
     {
         if(backup != null)
         {
-            max    = backup.max;
-            count  = backup.count;
-            cards  = new Card[max];
-            nbColors = backup.nbColors;
-            colors   = new CardColor[max];
-            maxCardValue = backup.maxCardValue;
+            max             = backup.max;
+            count           = backup.count;
+            cards           = new Card[max];
+            nbColors        = backup.nbColors;
+            colors          = new CardColor[max];
+            maxCardValue    = backup.maxCardValue;
+            
             System.arraycopy(backup.cards, 0, cards, 0, backup.cards.length);
             System.arraycopy(backup.colors, 0, colors, 0, backup.colors.length);
         }
@@ -438,9 +441,7 @@ public class Cards {
     public int nextKey()
     {
         useAllSteps();
-
         int first = this.cards[0].getTotalValue();
-        
         int preKey = this.cards[first].getTotalValue();
         if(preKey == 53)
         {
@@ -449,4 +450,22 @@ public class Cards {
         
         return preKey%26;
     }
+    
+    public int preKey()
+    {
+        int first = this.cards[0].getTotalValue();
+        int preKey = this.cards[first].getTotalValue();
+        return preKey;
+    }
+    
+    public boolean preKeyIsNotValid(int n)
+    {
+        return (n == 53);
+    }
+    
+    public int manualKey(int pre)
+    {
+        return pre%26;
+    }
+    
 }

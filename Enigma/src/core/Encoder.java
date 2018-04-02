@@ -6,6 +6,8 @@
 package core;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -14,23 +16,51 @@ import java.awt.Color;
 public class Encoder {
     
     private Cards cards;
-    private boolean stepToStep;
+    private int msgLength;
+    private List<Step> steps;
+    private List<Integer> nbSteps;
     
     public Encoder(Cards cards)
     {
-        this.cards = cards;
+        this.cards  = cards;
+        steps       = new ArrayList<Step>();
+        nbSteps     = new ArrayList<Integer>();
+        msgLength   = 0;
     }
     
-    public String generateKey(int length)
+    public List<Step> getSteps()
     {
-        cards.loadBackup();
-        String key = "";
-        for(int i=0 ; i<length ; i++)
+        return steps;
+    }
+    
+    public int getNbStepsSize()
+    {
+        return nbSteps.size();
+    }
+    
+    public int getNbSteps(int n)
+    {
+        return (nbSteps.size() > 0)?nbSteps.get(n):0;
+    }
+    
+    public String getSeed(int c, int n)
+    {
+        return steps.get(n + c*n).getSeed();
+    }
+    
+    public int getTotalNbSteps()
+    {
+        int cmpt = 0;
+        for(int i=0 ; i<nbSteps.size() ; i++)
         {
-            key += intToUpperCaseChar(cards.nextKey());
+            cmpt += nbSteps.get(i);
         }
-        
-        return key;
+        return cmpt;
+    }
+    
+    public int getMsgLength()
+    {
+        return msgLength;
     }
     
     public int charToInt(char c)
@@ -46,6 +76,52 @@ public class Encoder {
     public char intToUpperCaseChar(int i)
     {
         return (char)('A'+(i-1));
+    }
+    
+    public void addStep(int n, int c)
+    {
+        steps.add(new Step(n, c, generateSeed()));
+        if(nbSteps.size() <= c)
+        {
+            nbSteps.add(1);
+        }
+        else
+        {
+            int v = nbSteps.get(c);
+            nbSteps.set(c, v+1);
+        }
+    }
+    
+    public int getNextKey(int n)
+    {
+        int pre = 0;
+        do
+        {
+            cards.stepOne();
+            addStep(1, n);
+            cards.stepTwo();
+            addStep(2, n);
+            cards.stepThree();
+            addStep(3, n);
+            cards.stepFour();
+            addStep(4, n);
+            pre = cards.preKey();
+        } while(cards.preKeyIsNotValid(pre));
+        return cards.manualKey(pre);
+    }
+    
+    public String generateKey(int length)
+    {
+        msgLength   = length;
+        steps.clear();
+        nbSteps.clear();
+        cards.loadBackup();
+        String key = "";
+        for(int i=0 ; i<length ; i++)
+        {
+            key += intToUpperCaseChar(getNextKey(i));
+        }
+        return key;
     }
     
     public String encrypt(String message)
@@ -168,6 +244,5 @@ public class Encoder {
             }
         }
         this.cards.setCards(cards);
-        this.cards.saveCurrentState();
     }
 }

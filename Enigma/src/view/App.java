@@ -8,22 +8,15 @@ package view;
 import core.Cards;
 import core.Encoder;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static java.lang.System.exit;
 import javax.swing.border.TitledBorder;
-import java.awt.AWTException;
-import java.awt.HeadlessException;
-import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -35,6 +28,8 @@ public class App extends javax.swing.JFrame {
     private Encoder encoder;
     private CardViewer cardViewer;
     private TitledBorder messageBorder;
+    private int currentChar;
+    private int currentStep;
 
     public App(Cards cards, Encoder encoder, CardViewer cv) {
         initComponents();
@@ -45,6 +40,9 @@ public class App extends javax.swing.JFrame {
         messageBorder = new TitledBorder("MODE PAS A PAS");
         messageBorder.setTitleJustification(TitledBorder.CENTER);
         messageBorder.setTitlePosition(TitledBorder.TOP);
+        jPanelSteps.setVisible(false);
+        currentChar = 0;
+        currentStep = 0;
     }
     
     private void setCardViewer(CardViewer cv)
@@ -69,10 +67,17 @@ public class App extends javax.swing.JFrame {
     }
     
     @Override
-    public void repaint()
+    public void paint(Graphics g)
     {
-        super.repaint();
-        cardViewer.repaint();
+        super.paint(g);
+        int max = encoder.getSteps().size();
+        this.menuStepByStep.setEnabled(max > 0);
+        
+        int possi  = encoder.getMsgLength() * 4;
+        int fails  = (encoder.getTotalNbSteps()-possi)/4;
+        this.jLabelTotal.setText("Total: " + max + " (dont " + fails + " recalculs)");
+        this.jLabelNChar.setText("Caractère n°" + (1+currentChar) + "/" + encoder.getMsgLength());
+        this.jLabelNStep.setText("Etape n°" + (1+currentStep) + "/" + encoder.getNbSteps(currentChar));
     }
     
     public static void copy(String text)
@@ -103,6 +108,12 @@ public class App extends javax.swing.JFrame {
         return systemClipboard;
     }
     
+    public void updateSteps()
+    {
+        String seed = encoder.getSeed(currentChar, currentStep);
+        encoder.decodeSeed(seed);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -125,6 +136,16 @@ public class App extends javax.swing.JFrame {
         textToDecrypt = new javax.swing.JTextField();
         jPanel8 = new javax.swing.JPanel();
         decryptedText = new javax.swing.JTextField();
+        jPanelSteps = new javax.swing.JPanel();
+        jLabelTotal = new javax.swing.JLabel();
+        jLabelNChar = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jButCharPrev = new javax.swing.JButton();
+        jButCharNext = new javax.swing.JButton();
+        jLabelNStep = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jButStepPrev = new javax.swing.JButton();
+        jButStepNext = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
@@ -133,7 +154,7 @@ public class App extends javax.swing.JFrame {
         menuQuitter = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         menuLoadBackup = new javax.swing.JMenuItem();
-        menuSteptoStep = new javax.swing.JCheckBoxMenuItem();
+        menuStepByStep = new javax.swing.JCheckBoxMenuItem();
         jMenu3 = new javax.swing.JMenu();
         menuNaturalMix = new javax.swing.JMenuItem();
         menuColorMix = new javax.swing.JMenuItem();
@@ -205,6 +226,59 @@ public class App extends javax.swing.JFrame {
 
         jPanel1.add(jPanelMessages, java.awt.BorderLayout.SOUTH);
 
+        jPanelSteps.setLayout(new java.awt.GridLayout(5, 1, 1, 1));
+
+        jLabelTotal.setText("Total :");
+        jPanelSteps.add(jLabelTotal);
+
+        jLabelNChar.setText("Caractère n°");
+        jPanelSteps.add(jLabelNChar);
+
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
+
+        jButCharPrev.setText("-");
+        jButCharPrev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButCharPrevActionPerformed(evt);
+            }
+        });
+        jPanel3.add(jButCharPrev);
+
+        jButCharNext.setText("+");
+        jButCharNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButCharNextActionPerformed(evt);
+            }
+        });
+        jPanel3.add(jButCharNext);
+
+        jPanelSteps.add(jPanel3);
+
+        jLabelNStep.setText("Etape n°");
+        jPanelSteps.add(jLabelNStep);
+
+        jPanel4.setLayout(new java.awt.GridLayout(1, 0));
+
+        jButStepPrev.setText("-");
+        jButStepPrev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButStepPrevActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jButStepPrev);
+
+        jButStepNext.setText("+");
+        jButStepNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButStepNextActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jButStepNext);
+
+        jPanelSteps.add(jPanel4);
+
+        jPanel1.add(jPanelSteps, java.awt.BorderLayout.EAST);
+
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         jMenu1.setText("Fichier");
@@ -249,13 +323,13 @@ public class App extends javax.swing.JFrame {
         });
         jMenu2.add(menuLoadBackup);
 
-        menuSteptoStep.setText("Pas à pas");
-        menuSteptoStep.addActionListener(new java.awt.event.ActionListener() {
+        menuStepByStep.setText("Pas à pas");
+        menuStepByStep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuSteptoStepActionPerformed(evt);
+                menuStepByStepActionPerformed(evt);
             }
         });
-        jMenu2.add(menuSteptoStep);
+        jMenu2.add(menuStepByStep);
 
         jMenuBar1.add(jMenu2);
 
@@ -303,75 +377,82 @@ public class App extends javax.swing.JFrame {
     private void encryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encryptButtonActionPerformed
         String tmp = cleanString(textToEncrypt.getText());
         this.textToEncrypt.setText(tmp);
+        this.currentChar = 0;
+        this.currentStep = 0;
         if(!tmp.equals(""))
         {
             tmp = encoder.encrypt(tmp);
             this.encryptedText.setText(tmp);
         }
-        this.cardViewer.repaint();
+        repaint();
     }//GEN-LAST:event_encryptButtonActionPerformed
 
     private void decryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decryptButtonActionPerformed
         String tmp = cleanString(textToDecrypt.getText());
         this.textToDecrypt.setText(tmp);
+        this.currentChar = 0;
+        this.currentStep = 0;
         if(!tmp.equals(""))
         {
             tmp = encoder.decrypt(tmp);
             this.decryptedText.setText(tmp);
         }
-        this.cardViewer.repaint();
+        repaint();
     }//GEN-LAST:event_decryptButtonActionPerformed
 
     private void menuColorMixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuColorMixActionPerformed
         this.cards.colorMix();
-        this.cardViewer.repaint();
+        repaint();
     }//GEN-LAST:event_menuColorMixActionPerformed
 
     private void menuValueMixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuValueMixActionPerformed
         this.cards.valueMix();
-        this.cardViewer.repaint();
+        repaint();
     }//GEN-LAST:event_menuValueMixActionPerformed
 
     private void menuRandomMixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRandomMixActionPerformed
         this.cards.randomMix();
-        this.cardViewer.repaint();
+        repaint();
     }//GEN-LAST:event_menuRandomMixActionPerformed
 
     private void menuNaturalMixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNaturalMixActionPerformed
         this.cards.naturalMix();
-        this.cardViewer.repaint();
+        repaint();
     }//GEN-LAST:event_menuNaturalMixActionPerformed
 
     private void menuQuitterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuQuitterActionPerformed
         exit(0);
     }//GEN-LAST:event_menuQuitterActionPerformed
 
-    private void menuSteptoStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSteptoStepActionPerformed
-        if(this.menuSteptoStep.isSelected())
+    private void menuStepByStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuStepByStepActionPerformed
+        if(this.menuStepByStep.isSelected())
         {
             this.jPanel1.setBorder(messageBorder);
+            this.jPanelSteps.setVisible(true);
+            updateSteps();
         }
         else
         {
             this.jPanel1.setBorder(null);
+            this.jPanelSteps.setVisible(false);
         }
         repaint();
-    }//GEN-LAST:event_menuSteptoStepActionPerformed
+    }//GEN-LAST:event_menuStepByStepActionPerformed
 
     private void menuLoadBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLoadBackupActionPerformed
         this.cards.loadBackup();
-        this.cardViewer.repaint();
+        repaint();
     }//GEN-LAST:event_menuLoadBackupActionPerformed
 
     private void menuLoadSeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLoadSeedActionPerformed
         SeedViewer sv = new SeedViewer("Charger une seed", "Coller", "Charger");
-        sv.button1.addActionListener(new ActionListener() 
+        sv.getButton1().addActionListener(new ActionListener() 
         {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try 
                 {
-                    sv.jText.setText(ClipboardGet());
+                    sv.getjText().setText(ClipboardGet());
                 }
                 catch (Exception ex)
                 {
@@ -379,26 +460,27 @@ public class App extends javax.swing.JFrame {
                 }
             }
         });
-        sv.button2.addActionListener(new ActionListener() 
+        sv.getButton2().addActionListener(new ActionListener() 
         {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String seed = sv.jText.getText();
+                String seed = sv.getjText().getText();
                 if(seed.equals(""))
                 {
-                    sv.jNoti.setText("La seed ne peut pas être vide!");
+                    sv.getjNoti().setText("La seed ne peut pas être vide!");
                 }
                 else
                 {
                     if(encoder.validateSeed(seed))
                     {
                         encoder.decodeSeed(seed);
+                        cards.saveCurrentState();
                         repaint();
                         sv.dispose();
                     }
                     else
                     {
-                        sv.jNoti.setText("La seed est incorrect!");
+                        sv.getjNoti().setText("La seed est incorrect!");
                     }
                     
                 }
@@ -410,16 +492,16 @@ public class App extends javax.swing.JFrame {
     private void menuShowSeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuShowSeedActionPerformed
         String seed = encoder.generateSeed();
         SeedViewer sv = new SeedViewer("Voir la seed", "Copier", "Ok");
-        sv.jText.setText(seed);
-        sv.button1.addActionListener(new ActionListener() 
+        sv.getjText().setText(seed);
+        sv.getButton1().addActionListener(new ActionListener() 
         {
             @Override
             public void actionPerformed(ActionEvent e) {
                 copy(seed);
-                sv.jNoti.setText("Copié dans le presse-papier!");
+                sv.getjNoti().setText("Copié dans le presse-papier!");
             }
         });
-        sv.button2.addActionListener(new ActionListener() 
+        sv.getButton2().addActionListener(new ActionListener() 
         {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -429,23 +511,71 @@ public class App extends javax.swing.JFrame {
         sv.setVisible(true);
     }//GEN-LAST:event_menuShowSeedActionPerformed
 
+    private void jButCharNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButCharNextActionPerformed
+        if(currentChar < (encoder.getMsgLength()-1))
+        {
+            currentStep = 0;
+            currentChar++;
+            updateSteps();
+        }
+        repaint();
+    }//GEN-LAST:event_jButCharNextActionPerformed
+
+    private void jButCharPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButCharPrevActionPerformed
+        if(currentChar > 0)
+        {
+            currentStep = 0;
+            currentChar--;
+            updateSteps();
+        }
+        repaint();
+    }//GEN-LAST:event_jButCharPrevActionPerformed
+
+    private void jButStepNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButStepNextActionPerformed
+        if(currentStep < (encoder.getNbSteps(currentChar)-1))
+        {
+            currentStep++;
+            updateSteps();
+        }
+        repaint();
+    }//GEN-LAST:event_jButStepNextActionPerformed
+
+    private void jButStepPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButStepPrevActionPerformed
+        if(currentStep > 0)
+        {
+            currentStep--;
+            updateSteps();
+        }
+        repaint();
+    }//GEN-LAST:event_jButStepPrevActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton decryptButton;
     private javax.swing.JTextField decryptedText;
     private javax.swing.JButton encryptButton;
     private javax.swing.JTextField encryptedText;
+    private javax.swing.JButton jButCharNext;
+    private javax.swing.JButton jButCharPrev;
+    private javax.swing.JButton jButStepNext;
+    private javax.swing.JButton jButStepPrev;
+    private javax.swing.JLabel jLabelNChar;
+    private javax.swing.JLabel jLabelNStep;
+    private javax.swing.JLabel jLabelTotal;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanelCenter;
     private javax.swing.JPanel jPanelMessages;
+    private javax.swing.JPanel jPanelSteps;
     private javax.swing.JMenuItem menuColorMix;
     private javax.swing.JMenuItem menuLoadBackup;
     private javax.swing.JMenuItem menuLoadSeed;
@@ -453,7 +583,7 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuQuitter;
     private javax.swing.JMenuItem menuRandomMix;
     private javax.swing.JMenuItem menuShowSeed;
-    private javax.swing.JCheckBoxMenuItem menuSteptoStep;
+    private javax.swing.JCheckBoxMenuItem menuStepByStep;
     private javax.swing.JMenuItem menuValueMix;
     private javax.swing.JTextField textToDecrypt;
     private javax.swing.JTextField textToEncrypt;

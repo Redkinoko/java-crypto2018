@@ -16,10 +16,10 @@ import javax.swing.JTextField;
  */
 public class SeedViewer extends javax.swing.JFrame {
 
-    public JButton button1;
-    public JButton button2;
-    public JTextField jText;
-    public JLabel jNoti;
+    private JButton button1;
+    private JButton button2;
+    private JTextField jText;
+    private JLabel jNoti;
     
     public SeedViewer(String title, String but1, String but2) {
         initComponents();
@@ -40,6 +40,24 @@ public class SeedViewer extends javax.swing.JFrame {
         });
     }
 
+    public JButton getButton1() {
+        return button1;
+    }
+
+    public JButton getButton2() {
+        return button2;
+    }
+
+    public JTextField getjText() {
+        return jText;
+    }
+
+    public JLabel getjNoti() {
+        return jNoti;
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

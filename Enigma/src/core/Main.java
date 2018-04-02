@@ -30,7 +30,7 @@ public class Main {
         
         //CREATION DE L'ENCODEUR
         Encoder encoder = new Encoder(cards);
-        
+
         //CREATION DU PANEL DE VISUALISATION DES CARTES
         CardViewer cw   = new CardViewer(cards);
         
