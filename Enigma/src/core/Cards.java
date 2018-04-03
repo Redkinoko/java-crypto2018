@@ -352,7 +352,7 @@ public class Cards {
     {
         Card[] res = new Card[max];
         int ind = 0;
-        for(int i=0 ; i<max-b ; i++)
+        for(int i=1 ; i<max-b ; i++)
         {
             if(ind<max)
             {
@@ -364,11 +364,11 @@ public class Cards {
         {
             if(ind<max)
             {
-                res[ind] = (this.cards[a+i-1]);
+                res[ind] = (this.cards[a+i]);
                 ind++;
             }
         }
-        for(int i=0 ; i<a-1 ; i++)
+        for(int i=0 ; i<a ; i++)
         {
             if(ind<max)
             {
